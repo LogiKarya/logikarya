@@ -1,0 +1,57 @@
+<div
+  class="app-toolbar d-flex align-items-center justify-content-between px-3 py-2 border-bottom bg-white"
+>
+  <!-- Left: Title / Context -->
+  <div class="d-flex align-items-center gap-2">
+    <span class="fw-semibold">Workspace</span>
+    <span id="current-section" class="badge bg-secondary">Life Math</span>
+  </div>
+
+  <!-- Center: Actions -->
+  <div class="d-flex align-items-center gap-2">
+    <button
+      class="btn btn-outline-primary btn-sm"
+      onclick="saveProgress()"
+      title="Simpan progress"
+    >
+      Save
+    </button>
+
+    <button
+      class="btn btn-outline-success btn-sm"
+      onclick="exportData()"
+      title="Export hasil"
+    >
+      Export
+    </button>
+
+    <button
+      class="btn btn-outline-danger btn-sm"
+      onclick="resetWorkspace()"
+      title="Reset workspace"
+    >
+      Reset
+    </button>
+  </div>
+
+  <!-- Right: Utility -->
+  <div class="d-flex align-items-center gap-2">
+    <button
+      class="btn btn-outline-dark btn-sm"
+      onclick="toggleFullscreen()"
+      title="Fullscreen"
+      aria-label="Toggle Fullscreen"
+    >
+      ⛶
+    </button>
+
+    <button
+      class="btn btn-outline-secondary btn-sm"
+      onclick="toggleTheme()"
+      title="Ganti tema"
+      aria-label="Toggle Theme"
+    >
+      🌙
+    </button>
+  </div>
+</div>

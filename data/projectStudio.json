@@ -1,0 +1,37 @@
+{
+  "title": "Math Project Studio",
+  "projects": [
+    {
+      "id": "design",
+      "nama": "Proyek Kota Masa Depan",
+      "kategori": "Design",
+      "deskripsi": "Buat desain kota masa depan dengan mempertimbangkan tata ruang, transportasi, dan teknologi.",
+      "tools": ["canvas", "shapes", "color-picker", "text", "diagram", "table"],
+      "output": "Gambar kota masa depan"
+    },
+    {
+      "id": "science",
+      "nama": "Proyek Prediksi Cuaca",
+      "kategori": "Sains & Lingkungan",
+      "deskripsi": "Analisis pola cuaca dan buat prediksi berdasarkan data sederhana seperti suhu dan kelembaban.",
+      "tools": ["canvas", "chart", "diagram", "table", "color-picker"],
+      "output": "Diagram dan visualisasi prediksi cuaca"
+    },
+    {
+      "id": "technology",
+      "nama": "Proyek AI Sederhana",
+      "kategori": "Teknologi",
+      "deskripsi": "Buat program sederhana menggunakan code editor untuk mensimulasikan logika AI dasar.",
+      "tools": ["code-editor", "run-button", "preview"],
+      "output": "Program berjalan di preview"
+    },
+    {
+      "id": "economy",
+      "nama": "Proyek Pengusaha",
+      "kategori": "Ekonomi",
+      "deskripsi": "Rancang ide bisnis sederhana, termasuk produk, harga, dan strategi pemasaran.",
+      "tools": ["canvas", "diagram", "table", "text", "color-picker"],
+      "output": "Model bisnis visual"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "projects": [
+    {
+      "id": "city",
+      "title": "Kota Masa Depan",
+      "description": "Rancang kota dengan konsep matematika seperti geometri, jarak, dan efisiensi transportasi.",
+      "tools": ["draw", "shape", "text", "table"]
+    },
+    {
+      "id": "weather",
+      "title": "Prediksi Cuaca",
+      "description": "Gunakan pola data untuk memprediksi cuaca menggunakan grafik dan diagram.",
+      "tools": ["draw", "chart", "text", "table"]
+    },
+    {
+      "id": "ai",
+      "title": "AI Sederhana",
+      "description": "Buat model sederhana untuk memprediksi nilai menggunakan logika dasar.",
+      "tools": ["code"]
+    },
+    {
+      "id": "business",
+      "title": "Simulasi Pengusaha",
+      "description": "Kelola bisnis dengan konsep matematika seperti keuntungan, biaya, dan strategi harga.",
+      "tools": ["draw", "text", "table"]
+    }
+  ]
+}

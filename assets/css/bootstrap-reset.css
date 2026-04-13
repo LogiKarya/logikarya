@@ -1,0 +1,148 @@
+/* ===============================
+   RESET BOOTSTRAP DEFAULT STYLE
+================================ */
+
+/* Hilangkan shadow default */
+.btn,
+.card,
+.navbar {
+  box-shadow: none !important;
+}
+
+/* Border radius konsisten */
+.btn,
+.card,
+.form-control,
+textarea {
+  border-radius: 8px !important;
+}
+
+/* Navbar lebih clean */
+.navbar {
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-content {
+  flex: 1;
+  justify-content: space-between;
+}
+
+/* Link navbar */
+.navbar .nav-link {
+  color: #ccc !important;
+  transition: 0.2s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #ffffff !important;
+}
+
+/* Button lebih smooth */
+.btn {
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Card lebih modern */
+.card {
+  border: 1px solid #e5e5e5 !important;
+  padding: 15px;
+}
+
+/* Form control */
+.form-control:focus,
+textarea:focus {
+  box-shadow: none !important;
+  border-color: #666;
+}
+
+/* Range input */
+input[type="range"] {
+  cursor: pointer;
+}
+
+/* Color picker */
+input[type="color"] {
+  border: none;
+  background: none;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+/* List */
+ul {
+  margin-bottom: 0;
+}
+
+/* Badge */
+.badge {
+  font-size: 0.75rem;
+}
+
+/* Scrollbar (modern look) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* ===============================
+   DARK MODE SUPPORT
+================================ */
+.dark-mode .navbar {
+  background-color: #1a1a1a !important;
+  border-color: #333;
+}
+
+.dark-mode .navbar .nav-link {
+  color: #aaa !important;
+}
+
+.dark-mode .navbar .nav-link:hover,
+.dark-mode .navbar .nav-link.active {
+  color: #fff !important;
+}
+
+.dark-mode .btn {
+  border-color: #444;
+  color: #ddd;
+}
+
+.dark-mode .btn:hover {
+  background-color: #333;
+}
+
+.dark-mode .card {
+  border-color: #333 !important;
+}
+
+html {
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 991.98px) {
+  .navbar {
+    position: relative;
+  }
+
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

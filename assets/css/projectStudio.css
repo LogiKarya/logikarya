@@ -1,0 +1,122 @@
+/* ===============================
+   PROJECT STUDIO SECTION
+================================ */
+#project-studio {
+  padding: 10px;
+}
+
+/* ===============================
+   GRID LAYOUT
+================================ */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+}
+
+/* ===============================
+   PROJECT CARD
+================================ */
+.project-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   TITLE
+================================ */
+.project-card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   CANVAS AREA
+================================ */
+.project-card canvas {
+  width: 100%;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+/* ===============================
+   CODE EDITOR
+================================ */
+.code-editor {
+  width: 100%;
+  height: 150px;
+  font-family: monospace;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  resize: vertical;
+  background-color: #fdfdfd;
+}
+
+/* Preview iframe */
+.code-preview-iframe {
+  width: 100%;
+  height: 150px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+#run-code {
+  width: 100%;
+}
+
+/* ===============================
+   CATEGORY COLOR ACCENT
+================================ */
+.project-card:nth-child(1) {
+  border-left: 5px solid #0d6efd; /* Design */
+}
+
+.project-card:nth-child(2) {
+  border-left: 5px solid #20c997; /* Science */
+}
+
+.project-card:nth-child(3) {
+  border-left: 5px solid #6f42c1; /* Technology */
+}
+
+.project-card:nth-child(4) {
+  border-left: 5px solid #fd7e14; /* Economy */
+}
+
+/* ===============================
+   DARK MODE
+================================ */
+.dark-mode .project-card {
+  background-color: #1e1e1e;
+  border-color: #333;
+  color: #ffffff;
+}
+
+.dark-mode .project-card canvas {
+  background-color: #2a2a2a;
+  border-color: #555;
+}
+
+.dark-mode .code-editor {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #444;
+}
+
+.dark-mode .code-preview-iframe {
+  background-color: #1e1e1e;
+  border-color: #444;
+}

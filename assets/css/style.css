@@ -1,0 +1,256 @@
+/* ===============================
+   GLOBAL RESET & BASE
+================================ */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background-color: #f5f6fa;
+  color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+/* ===============================
+   LAYOUT
+================================ */
+.main-content {
+  margin-top: 56px;
+  flex: 1;
+  min-height: 100vh;
+  background-color: #f9fafc;
+}
+
+/* ===============================
+   SIDEBAR
+================================ */
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+}
+
+/* ===============================
+   SECTION (SPA STYLE)
+================================ */
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* ===============================
+   CARD
+================================ */
+.card {
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   FORMULA (Life Math)
+================================ */
+.formula {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* ===============================
+   TOOLBAR GLOBAL
+================================ */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ===============================
+   PROJECT STUDIO
+================================ */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.project-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* ===============================
+   CODE EDITOR
+================================ */
+.code-editor {
+  width: 100%;
+  height: 150px;
+  font-family: monospace;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.code-preview-iframe {
+  width: 100%;
+  height: 150px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* ===============================
+   ROBOT MATH
+================================ */
+.robot-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.robot-sidebar {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.block-palette {
+  width: 200px;
+  min-height: 300px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.workspace {
+  flex: 1;
+  min-height: 300px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.robot-output {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+.app-footer {
+  margin-top: auto;
+}
+
+/* ===============================
+   DARK MODE
+================================ */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .card,
+.dark-mode .project-card {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-color: #333;
+}
+
+.dark-mode .sidebar {
+  background-color: #1a1a1a;
+  border-color: #333;
+}
+
+.dark-mode .workspace {
+  background-color: #1e1e1e;
+  border-color: #555;
+}
+
+.dark-mode .block-palette {
+  background-color: #2a2a2a;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .robot-container {
+    flex-direction: column;
+  }
+
+  .robot-sidebar,
+  .block-palette,
+  .robot-output {
+    width: 100%;
+  }
+}
+/* =========================
+   SIDEBAR HIDDEN MODE
+========================= */
+.sidebar {
+  width: 250px;
+  height: calc(100vh - 56px); /* ⬅ penting */
+  position: fixed;
+  top: 56px; /* ⬅ penting (tinggi navbar) */
+  left: 0;
+  z-index: 1050;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+/* saat aktif */
+.sidebar.show {
+  transform: translateX(0);
+}
+
+/* overlay (background gelap) */
+.sidebar-overlay {
+  position: fixed;
+  top: 56px; /* ⬅ sama seperti sidebar */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 56px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1040;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1100;
+}

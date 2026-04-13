@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>LogiKarya</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/vendor/bs5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/bootstrap-reset.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/lifeMath.css" />
+    <link rel="stylesheet" href="assets/css/projectStudio.css" />
+    <link rel="stylesheet" href="assets/css/robotMath.css" />
+
+    <!-- Canvas CSS -->
+    <link rel="stylesheet" href="assets/canvas/css/whiteboard.css" />
+  </head>
+
+  <body>
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+    <div id="navbar"></div>
+
+    <!-- =========================
+         SIDEBAR OVERLAY (FIX: MOVE HERE)
+    ========================== -->
+    <div
+      id="sidebar-overlay"
+      class="sidebar-overlay"
+      onclick="closeSidebar()"
+    ></div>
+
+    <!-- =========================
+         APP LAYOUT WRAPPER (FIX IMPORTANT)
+    ========================== -->
+    <div class="app-layout d-flex">
+      <!-- SIDEBAR -->
+      <div id="sidebar"></div>
+
+      <!-- MAIN CONTENT -->
+      <main id="main-content" class="main-content flex-grow-1 p-3">
+        <!-- ===== LIFE MATH ===== -->
+        <section id="life-math" class="section active">
+          <h1>Life Math</h1>
+
+          <div class="card p-3 mb-3" id="teori-card">
+            <h2>Teori</h2>
+            <p class="formula">v = s / t</p>
+          </div>
+
+          <div class="card p-3 mb-3" id="contoh-card">
+            <h2>Problem</h2>
+            <ul>
+              <li>Mengapa siswa bisa terlambat?</li>
+              <li>Apabila kecepatanmu 10 km/jam?</li>
+              <li>Apa masalah tiap jalur dari rumah ke sekolah?</li>
+              <li>Berapa jarak masing-masing jalur?</li>
+              <li>Kapan harus berangkat agar tidak terlambat?</li>
+            </ul>
+          </div>
+
+          <div class="card p-3" id="solving-card">
+            <h2>Solving</h2>
+            <div id="whiteboard-toolbar"></div>
+            <canvas id="whiteboard" width="800" height="500"></canvas>
+          </div>
+        </section>
+
+        <!-- ===== PROJECT STUDIO ===== -->
+        <section id="project-studio" class="section">
+          <h1>Project Studio</h1>
+
+          <div class="project-grid">
+            <div class="project-card">
+              <h2>Design</h2>
+              <canvas id="design-canvas" width="400" height="300"></canvas>
+            </div>
+
+            <div class="project-card">
+              <h2>Sains & Lingkungan</h2>
+              <canvas id="canvas-science" width="400" height="300"></canvas>
+            </div>
+
+            <div class="project-card">
+              <h2>Teknologi</h2>
+
+              <label for="code-editor">Code Editor:</label>
+              <textarea id="code-editor" class="code-editor">
+<h3>Hello World</h3>
+<script>
+  console.log("Hello, LogiKarya!");
+</script>
+              </textarea>
+
+              <button id="run-code" class="btn btn-primary mt-2">
+                Run Code
+              </button>
+
+              <iframe
+                id="code-preview"
+                title="Code Preview Output"
+                class="code-preview-iframe mt-2"
+                sandbox="allow-scripts"
+              ></iframe>
+            </div>
+
+            <div class="project-card">
+              <h2>Ekonomi</h2>
+              <canvas id="canvas-economy" width="400" height="300"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- == Robot Math == -->
+        <section id="robot-math" class="section">
+          <h1>Robot Math</h1>
+
+          <div class="robot-container d-flex">
+            <!-- Sidebar Category -->
+            <div class="robot-sidebar">
+              <button onclick="showCategory('motion')">Motion</button>
+              <button onclick="showCategory('control')">Control</button>
+              <button onclick="showCategory('event')">Event</button>
+              <button onclick="showCategory('operator')">Operator</button>
+              <button onclick="showCategory('variable')">Variable</button>
+            </div>
+
+            <!-- Block Palette -->
+            <div class="block-palette" id="palette"></div>
+
+            <!-- Workspace -->
+            <div class="workspace" id="workspace"></div>
+
+            <!-- Output -->
+            <div class="robot-output">
+              <canvas id="robot-canvas" width="400" height="300"></canvas>
+              <button onclick="runProgram()" class="btn btn-success mt-2">
+                ▶ Run
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+ 
+    <!-- FOOTER -->
+    <div id="footer"></div>
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+    <script src="assets/vendor/bs5/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/lifeMath.js" defer></script>
+    <script src="assets/js/projectStudio.js" defer></script>
+    <script src="assets/js/robotMath.js" defer></script>
+    <script src="assets/js/codeRunner.js" defer></script>
+
+    <script src="assets/canvas/js/whiteboard.js" defer></script>
+    <script src="assets/canvas/js/tools.js" defer></script>
+    <script src="assets/canvas/js/utils.js" defer></script>
+  </body>
+</html>

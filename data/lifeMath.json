@@ -1,0 +1,52 @@
+{
+  "title": "Life Math",
+  "teori": {
+    "judul": "Kecepatan",
+    "formula": "v = s / t",
+    "deskripsi": "Kecepatan adalah perbandingan antara jarak yang ditempuh dengan waktu yang dibutuhkan."
+  },
+  "problem": {
+    "judul": "Kasus Siswa Terlambat",
+    "pertanyaan": [
+      {
+        "id": "p1",
+        "teks": "Mengapa siswa bisa terlambat?"
+      },
+      {
+        "id": "p2",
+        "teks": "Apa yang terjadi apabila kecepatanmu hanya 10 km/jam?"
+      },
+      {
+        "id": "p3",
+        "teks": "Jika terdapat 3 jalur dari rumah ke sekolah, masalah apa yang mungkin dihadapi pada masing-masing jalur?"
+      },
+      {
+        "id": "p4",
+        "teks": "Berapa jarak masing-masing jalur yang ditempuh siswa?"
+      },
+      {
+        "id": "p5",
+        "teks": "Pukul berapakah kamu masuk sekolah?"
+      },
+      {
+        "id": "p6",
+        "teks": "Jam berapakah kamu harus berangkat agar sampai tepat waktu dengan jalur tercepat?"
+      }
+    ]
+  },
+  "solving": {
+    "instruksi": "Gunakan canvas di bawah untuk menggambar jalur, menghitung waktu tempuh, dan menentukan solusi terbaik.",
+    "tools": [
+      "pen",
+      "eraser",
+      "line",
+      "rectangle",
+      "circle",
+      "color-picker",
+      "brush-size",
+      "undo",
+      "redo",
+      "clear"
+    ]
+  }
+}

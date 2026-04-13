@@ -1,0 +1,240 @@
+/* =========================
+   GLOBAL CANVAS WRAPPER (FULL HEIGHT FIX)
+========================= */
+.canvas-wrapper {
+  width: 100%;
+  height: 100%;
+
+  /* 🔥 penting: supaya bisa ikut flex layout */
+  flex: 1;
+
+  position: relative;
+
+  background: var(--surface);
+  overflow: hidden;
+
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  /* 🔥 FIX: paksa minimal tinggi layar */
+  min-height: calc(100vh - 120px);
+}
+
+/* =========================
+   CANVAS BOARD
+========================= */
+.canvas-board {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  cursor: crosshair;
+
+  background: transparent;
+}
+
+/* =========================
+   TOOLBAR (FLOAT FIX)
+========================= */
+.canvas-tools {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: var(--surface);
+
+  border-radius: 12px;
+  padding: 8px 12px;
+
+  display: flex;
+  gap: 10px;
+
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+
+  z-index: 10;
+}
+
+.canvas-tools button {
+  background: var(--background);
+  border: 1px solid var(--border);
+
+  padding: 6px 10px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.canvas-tools button:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.canvas-tools button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* =========================
+   COLOR PICKER
+========================= */
+.color-picker {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.color-picker input[type="color"] {
+  width: 32px;
+  height: 32px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+/* =========================
+   BRUSH SIZE
+========================= */
+.brush-size {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brush-size input[type="range"] {
+  cursor: pointer;
+}
+
+/* =========================
+   FLOATING ELEMENT
+========================= */
+.canvas-element {
+  position: absolute;
+  min-width: 50px;
+  min-height: 30px;
+
+  cursor: move;
+  border-radius: 6px;
+}
+
+/* =========================
+   TEXT ELEMENT
+========================= */
+.canvas-text {
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  padding: 6px;
+  font-size: 14px;
+
+  box-shadow: var(--shadow);
+}
+
+/* =========================
+   SHAPES
+========================= */
+.canvas-rect {
+  background: rgba(37, 99, 235, 0.25);
+  border: 1px solid var(--primary);
+}
+
+.canvas-circle {
+  background: rgba(245, 158, 11, 0.25);
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+}
+
+.canvas-line {
+  position: absolute;
+  height: 2px;
+  background: var(--text);
+}
+
+/* =========================
+   SELECTION BOX
+========================= */
+.selection-box {
+  position: absolute;
+  border: 1px dashed var(--primary);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* =========================
+   LAYER CONTROL
+========================= */
+.canvas-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================
+   GRID BACKGROUND
+========================= */
+.canvas-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+
+  background-size: 20px 20px;
+}
+
+/* =========================
+   ZOOM INDICATOR
+========================= */
+.zoom-indicator {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+
+  background: var(--surface);
+  padding: 6px 10px;
+
+  border-radius: 8px;
+  font-size: 12px;
+
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* =========================
+   DRAG STATE
+========================= */
+.canvas-dragging {
+  opacity: 0.8;
+}
+
+/* =========================
+   RESIZE HANDLE
+========================= */
+.canvas-resize {
+  width: 10px;
+  height: 10px;
+
+  background: var(--text);
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  cursor: se-resize;
+}
+
+/* =========================
+   RESPONSIVE FIX
+========================= */
+@media (max-width: 768px) {
+  .canvas-wrapper {
+    min-height: calc(100vh - 140px);
+  }
+
+  .canvas-tools {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}

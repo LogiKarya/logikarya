@@ -1,0 +1,91 @@
+/* ===============================
+   WHITEBOARD CONTAINER
+================================ */
+.whiteboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ===============================
+   TOOLBAR (CANVAS)
+================================ */
+.whiteboard-toolbar {
+  border-radius: 8px;
+}
+
+/* ===============================
+   WRAPPER (AREA CANVAS)
+================================ */
+.whiteboard-wrapper {
+  height: 500px;
+  position: relative;
+  flex: 1;
+  background-color: #f0f2f5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ===============================
+   CANVAS
+================================ */
+#whiteboard {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  cursor: crosshair;
+}
+
+/* ===============================
+   GRID BACKGROUND (OPTIONAL EFFECT)
+================================ */
+.whiteboard-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#e0e0e0 1px, transparent 1px),
+    linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
+  background-size: 25px 25px;
+  pointer-events: none;
+}
+
+/* ===============================
+   TOOL BUTTON ACTIVE STATE
+================================ */
+.whiteboard-toolbar .btn.active {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+/* ===============================
+   INPUT (COLOR & RANGE)
+================================ */
+.whiteboard-toolbar input[type="range"] {
+  width: 80px;
+}
+
+.whiteboard-toolbar input[type="color"] {
+  padding: 0;
+  border: none;
+  width: 32px;
+  height: 32px;
+}
+
+/* ===============================
+   DARK MODE
+================================ */
+.dark-mode .whiteboard-wrapper {
+  background-color: #1e1e1e;
+}
+
+.dark-mode #whiteboard {
+  background-color: #2a2a2a;
+}
+
+.dark-mode .whiteboard-wrapper::before {
+  background-image:
+    linear-gradient(#333 1px, transparent 1px),
+    linear-gradient(90deg, #333 1px, transparent 1px);
+}

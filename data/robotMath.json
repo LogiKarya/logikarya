@@ -1,0 +1,130 @@
+{
+  "title": "Robot Math",
+  "categories": [
+    {
+      "id": "motion",
+      "nama": "Motion",
+      "blocks": [
+        {
+          "type": "move_forward",
+          "label": "Move Forward",
+          "params": {
+            "steps": 10
+          }
+        },
+        {
+          "type": "move_backward",
+          "label": "Move Backward",
+          "params": {
+            "steps": 10
+          }
+        },
+        {
+          "type": "turn_left",
+          "label": "Turn Left",
+          "params": {
+            "angle": 90
+          }
+        },
+        {
+          "type": "turn_right",
+          "label": "Turn Right",
+          "params": {
+            "angle": 90
+          }
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "nama": "Control",
+      "blocks": [
+        {
+          "type": "repeat",
+          "label": "Repeat",
+          "params": {
+            "times": 5
+          }
+        },
+        {
+          "type": "wait",
+          "label": "Wait",
+          "params": {
+            "seconds": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "event",
+      "nama": "Event",
+      "blocks": [
+        {
+          "type": "start",
+          "label": "When Start",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "operator",
+      "nama": "Operator",
+      "blocks": [
+        {
+          "type": "add",
+          "label": "Add",
+          "params": {
+            "a": 1,
+            "b": 1
+          }
+        },
+        {
+          "type": "subtract",
+          "label": "Subtract",
+          "params": {
+            "a": 5,
+            "b": 2
+          }
+        },
+        {
+          "type": "multiply",
+          "label": "Multiply",
+          "params": {
+            "a": 2,
+            "b": 3
+          }
+        },
+        {
+          "type": "divide",
+          "label": "Divide",
+          "params": {
+            "a": 10,
+            "b": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "variable",
+      "nama": "Variable",
+      "blocks": [
+        {
+          "type": "set_variable",
+          "label": "Set Variable",
+          "params": {
+            "name": "x",
+            "value": 0
+          }
+        },
+        {
+          "type": "change_variable",
+          "label": "Change Variable",
+          "params": {
+            "name": "x",
+            "delta": 1
+          }
+        }
+      ]
+    }
+  ]
+}

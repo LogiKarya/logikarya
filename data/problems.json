@@ -1,0 +1,11 @@
+{
+  "title": "Mengapa Siswa Terlambat?",
+  "description": "Analisis keterlambatan siswa menggunakan konsep kecepatan, jarak, dan waktu.",
+  "questions": [
+    "Apabila kecepatanmu 10 km/jam, apakah kamu bisa sampai tepat waktu?",
+    "Terdapat 3 jalur dari rumah ke sekolah. Apa saja kemungkinan masalah pada masing-masing jalur?",
+    "Berapa jarak masing-masing jalur yang tersedia?",
+    "Pukul berapakah kamu harus sudah berada di sekolah?",
+    "Jam berapakah kamu harus berangkat jika memilih jalur tercepat?"
+  ]
+}

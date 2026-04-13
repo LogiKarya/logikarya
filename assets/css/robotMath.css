@@ -1,0 +1,160 @@
+/* ===============================
+   ROBOT MATH SECTION
+================================ */
+#robot-math {
+  padding: 10px;
+}
+
+/* ===============================
+   CONTAINER
+================================ */
+.robot-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* ===============================
+   SIDEBAR (CATEGORY)
+================================ */
+.robot-sidebar {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.robot-sidebar button {
+  font-size: 0.8rem;
+  padding: 6px;
+}
+
+/* ===============================
+   BLOCK PALETTE
+================================ */
+.block-palette {
+  width: 200px;
+  min-height: 320px;
+  background-color: #f4f6f8;
+  border-radius: 10px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+/* Individual block */
+.block {
+  background-color: #0d6efd;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: grab;
+  font-size: 0.8rem;
+}
+
+.block:active {
+  cursor: grabbing;
+}
+
+/* ===============================
+   WORKSPACE
+================================ */
+.workspace {
+  flex: 1;
+  min-height: 320px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  background-color: #ffffff;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+/* Block di workspace */
+.workspace .block {
+  background-color: #20c997;
+}
+
+/* ===============================
+   OUTPUT (ROBOT CANVAS)
+================================ */
+.robot-output {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#robot-canvas {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+/* ===============================
+   CATEGORY COLOR VARIATION
+================================ */
+.block.motion {
+  background-color: #0d6efd;
+}
+
+.block.control {
+  background-color: #fd7e14;
+}
+
+.block.event {
+  background-color: #dc3545;
+}
+
+.block.operator {
+  background-color: #6f42c1;
+}
+
+.block.variable {
+  background-color: #198754;
+}
+
+/* ===============================
+   DARK MODE
+================================ */
+.dark-mode .block-palette {
+  background-color: #2a2a2a;
+}
+
+.dark-mode .workspace {
+  background-color: #1e1e1e;
+  border-color: #555;
+}
+
+.dark-mode .block {
+  opacity: 0.9;
+}
+
+.dark-mode #robot-canvas {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .robot-container {
+    flex-direction: column;
+  }
+
+  .robot-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .robot-sidebar button {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .block-palette,
+  .robot-output {
+    width: 100%;
+  }
+}
