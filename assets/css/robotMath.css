@@ -5,128 +5,328 @@
   padding: 10px;
 }
 
-/* ===============================
-   CONTAINER
-================================ */
 .robot-container {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   margin-top: 10px;
+  align-items: stretch;
 }
 
-/* ===============================
-   SIDEBAR (CATEGORY)
-================================ */
 .robot-sidebar {
-  width: 120px;
+  width: 150px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .robot-sidebar button {
-  font-size: 0.8rem;
-  padding: 6px;
-}
-
-/* ===============================
-   BLOCK PALETTE
-================================ */
-.block-palette {
-  width: 200px;
-  min-height: 320px;
-  background-color: #f4f6f8;
+  font-size: 0.85rem;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
-  padding: 10px;
-  overflow-y: auto;
+  background: #fff;
 }
 
-/* Individual block */
-.block {
-  background-color: #0d6efd;
+.robot-sidebar button.active {
+  background: #0d6efd;
   color: #fff;
-  padding: 6px 8px;
-  border-radius: 6px;
-  margin-bottom: 6px;
-  cursor: grab;
-  font-size: 0.8rem;
+  border-color: #0d6efd;
 }
 
-.block:active {
-  cursor: grabbing;
-}
-
-/* ===============================
-   WORKSPACE
-================================ */
-.workspace {
-  flex: 1;
-  min-height: 320px;
-  border: 2px dashed #ccc;
-  border-radius: 10px;
-  background-color: #ffffff;
-  padding: 10px;
+.block-palette {
+  width: 260px;
+  min-height: 420px;
+  background-color: #f4f6f8;
+  border-radius: 14px;
+  padding: 12px;
   overflow-y: auto;
 }
 
-/* Block di workspace */
-.workspace .block {
-  background-color: #20c997;
+.block {
+  color: #fff;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  cursor: grab;
+  font-size: 0.85rem;
 }
 
-/* ===============================
-   OUTPUT (ROBOT CANVAS)
-================================ */
-.robot-output {
-  width: 240px;
+.block-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.block-hint {
+  opacity: 0.9;
+  font-size: 0.72rem;
+}
+
+.workspace-wrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.workspace-toolbar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.workspace-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workspace-zoom-label {
+  min-width: 52px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #475569;
+}
+
+.workspace-stage {
+  flex: 1;
+  min-height: 420px;
+  border: 2px dashed #ccc;
+  border-radius: 14px;
+  background-color: #ffffff;
+  overflow: auto;
+}
+
+.workspace-zoom-shell {
+  min-width: 100%;
+  min-height: 100%;
+  padding: 12px;
+}
+
+.workspace {
+  min-height: 394px;
+  transform-origin: top left;
+  transition: transform 0.15s ease;
+}
+
+.workspace-placeholder {
+  margin: 0;
+  color: #64748b;
+}
+
+.workspace .block {
+  background-color: #20c997;
+  cursor: grab;
+}
+
+.workspace .block.dragging {
+  opacity: 0.55;
+}
+
+.workspace-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.workspace-block-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.workspace-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workspace-field label {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.workspace-field input,
+.workspace-field select {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.workspace-field input[type="color"] {
+  min-height: 38px;
+  padding: 4px;
+}
+
+.workspace-remove {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+}
+
+.robot-output {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.stage-panel {
+  border: 0;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.stage-inline-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.stage-inline-label {
+  margin: 0;
+  font-weight: 600;
+}
+
+.stage-settings {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stage-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stage-field label {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.stage-field input {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 8px;
+}
+
+.stage-field input[type="color"] {
+  min-height: 40px;
+  padding: 4px;
+}
+
+.stage-help {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin-bottom: 10px;
 }
 
 #robot-canvas {
+  width: 100%;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 10px;
   background-color: #fafafa;
+  cursor: grab;
 }
 
-/* ===============================
-   CATEGORY COLOR VARIATION
-================================ */
-.block.motion {
-  background-color: #0d6efd;
+#robot-canvas.dragging {
+  cursor: grabbing;
 }
 
-.block.control {
-  background-color: #fd7e14;
+.robot-output-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-.block.event {
+.robot-log {
+  min-height: 120px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f4f8ff;
+  border: 1px solid #cfe2ff;
+  font-weight: 500;
+  white-space: pre-line;
+}
+
+.block.kejadian {
   background-color: #dc3545;
 }
 
-.block.operator {
+.block.gerakan {
+  background-color: #0d6efd;
+}
+
+.block.operasi {
   background-color: #6f42c1;
 }
 
-.block.variable {
+.block.tampilan {
+  background-color: #fd7e14;
+}
+
+.block.kontrol {
   background-color: #198754;
 }
 
-/* ===============================
-   DARK MODE
-================================ */
+.block.sensor {
+  background-color: #0f766e;
+}
+
+.block.variabel {
+  background-color: #7c3aed;
+}
+
+.block.balok-saya {
+  background-color: #334155;
+}
+
 .dark-mode .block-palette {
   background-color: #2a2a2a;
 }
 
-.dark-mode .workspace {
+.dark-mode .workspace-stage {
   background-color: #1e1e1e;
   border-color: #555;
 }
 
+.dark-mode .workspace-placeholder,
+.dark-mode .workspace-zoom-label,
+.dark-mode .stage-help {
+  color: #a1a1aa;
+}
+
 .dark-mode .block {
-  opacity: 0.9;
+  opacity: 0.95;
+}
+
+.dark-mode .robot-sidebar button {
+  background: #2a2a2a;
+  color: #fff;
+  border-color: #444;
+}
+
+.dark-mode .stage-panel {
+  background-color: #1e1e1e;
+  color: #fff;
 }
 
 .dark-mode #robot-canvas {
@@ -134,27 +334,44 @@
   border-color: #444;
 }
 
-/* ===============================
-   RESPONSIVE
-================================ */
-@media (max-width: 768px) {
+.dark-mode .robot-log {
+  background-color: #243041;
+  border-color: #35506f;
+  color: #fff;
+}
+
+.dark-mode .workspace-field input,
+.dark-mode .workspace-field select,
+.dark-mode .stage-field input {
+  background: rgba(17, 24, 39, 0.85);
+  color: #fff;
+  border-color: #475569;
+}
+
+@media (max-width: 992px) {
   .robot-container {
     flex-direction: column;
   }
 
   .robot-sidebar {
     width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: stretch;
-  }
-
-  .robot-sidebar button {
-    flex: 1 1 calc(50% - 6px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 
   .block-palette,
   .robot-output {
     width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .workspace-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stage-settings {
+    grid-template-columns: 1fr;
   }
 }

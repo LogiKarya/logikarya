@@ -2,126 +2,405 @@
   "title": "Robot Math",
   "categories": [
     {
-      "id": "motion",
-      "nama": "Motion",
+      "id": "kejadian",
+      "nama": "Kejadian",
+      "blocks": [
+        {
+          "type": "start",
+          "label": "Ketika Mulai",
+          "description": "Titik awal program robot.",
+          "params": {}
+        },
+        {
+          "type": "when_clicked",
+          "label": "Saat Sprite Diklik",
+          "description": "Menandai kejadian saat sprite disentuh atau diklik.",
+          "params": {
+            "target": {
+              "label": "Target",
+              "type": "select",
+              "value": "sprite",
+              "options": ["sprite", "stage"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "gerakan",
+      "nama": "Gerakan",
       "blocks": [
         {
           "type": "move_forward",
-          "label": "Move Forward",
+          "label": "Maju",
+          "description": "Gerakkan sprite ke depan sesuai langkah.",
           "params": {
-            "steps": 10
+            "steps": {
+              "label": "Langkah",
+              "type": "number",
+              "value": 20,
+              "min": 0
+            }
           }
         },
         {
           "type": "move_backward",
-          "label": "Move Backward",
+          "label": "Mundur",
+          "description": "Gerakkan sprite ke belakang sesuai langkah.",
           "params": {
-            "steps": 10
+            "steps": {
+              "label": "Langkah",
+              "type": "number",
+              "value": 20,
+              "min": 0
+            }
           }
         },
         {
           "type": "turn_left",
-          "label": "Turn Left",
+          "label": "Belok Kiri",
+          "description": "Putar sprite ke kiri.",
           "params": {
-            "angle": 90
+            "angle": {
+              "label": "Sudut",
+              "type": "number",
+              "value": 90,
+              "min": 0
+            }
           }
         },
         {
           "type": "turn_right",
-          "label": "Turn Right",
+          "label": "Belok Kanan",
+          "description": "Putar sprite ke kanan.",
           "params": {
-            "angle": 90
-          }
-        }
-      ]
-    },
-    {
-      "id": "control",
-      "nama": "Control",
-      "blocks": [
-        {
-          "type": "repeat",
-          "label": "Repeat",
-          "params": {
-            "times": 5
+            "angle": {
+              "label": "Sudut",
+              "type": "number",
+              "value": 90,
+              "min": 0
+            }
           }
         },
         {
-          "type": "wait",
-          "label": "Wait",
+          "type": "go_to",
+          "label": "Pergi Ke",
+          "description": "Pindahkan sprite ke koordinat tertentu di stage.",
           "params": {
-            "seconds": 1
+            "x": {
+              "label": "X",
+              "type": "number",
+              "value": 150
+            },
+            "y": {
+              "label": "Y",
+              "type": "number",
+              "value": 180
+            }
           }
         }
       ]
     },
     {
-      "id": "event",
-      "nama": "Event",
-      "blocks": [
-        {
-          "type": "start",
-          "label": "When Start",
-          "params": {}
-        }
-      ]
-    },
-    {
-      "id": "operator",
-      "nama": "Operator",
+      "id": "operasi",
+      "nama": "Operasi",
       "blocks": [
         {
           "type": "add",
-          "label": "Add",
+          "label": "Tambah",
+          "description": "Jumlahkan dua angka.",
           "params": {
-            "a": 1,
-            "b": 1
+            "a": {
+              "label": "Angka A",
+              "type": "number",
+              "value": 1
+            },
+            "b": {
+              "label": "Angka B",
+              "type": "number",
+              "value": 1
+            }
           }
         },
         {
           "type": "subtract",
-          "label": "Subtract",
+          "label": "Kurang",
+          "description": "Kurangi angka pertama dengan angka kedua.",
           "params": {
-            "a": 5,
-            "b": 2
+            "a": {
+              "label": "Angka A",
+              "type": "number",
+              "value": 8
+            },
+            "b": {
+              "label": "Angka B",
+              "type": "number",
+              "value": 3
+            }
           }
         },
         {
           "type": "multiply",
-          "label": "Multiply",
+          "label": "Kali",
+          "description": "Kalikan dua angka.",
           "params": {
-            "a": 2,
-            "b": 3
+            "a": {
+              "label": "Angka A",
+              "type": "number",
+              "value": 3
+            },
+            "b": {
+              "label": "Angka B",
+              "type": "number",
+              "value": 4
+            }
           }
         },
         {
           "type": "divide",
-          "label": "Divide",
+          "label": "Bagi",
+          "description": "Bagi angka pertama dengan angka kedua.",
           "params": {
-            "a": 10,
-            "b": 2
+            "a": {
+              "label": "Angka A",
+              "type": "number",
+              "value": 12
+            },
+            "b": {
+              "label": "Angka B",
+              "type": "number",
+              "value": 2
+            }
+          }
+        },
+        {
+          "type": "modulo",
+          "label": "Modulo",
+          "description": "Hitung sisa hasil bagi.",
+          "params": {
+            "a": {
+              "label": "Angka A",
+              "type": "number",
+              "value": 10
+            },
+            "b": {
+              "label": "Angka B",
+              "type": "number",
+              "value": 3
+            }
+          }
+        },
+        {
+          "type": "triangle_area",
+          "label": "Luas Segitiga",
+          "description": "Hitung luas segitiga dari alas dan tinggi.",
+          "params": {
+            "base": {
+              "label": "Alas",
+              "type": "number",
+              "value": 10,
+              "min": 0
+            },
+            "height": {
+              "label": "Tinggi",
+              "type": "number",
+              "value": 6,
+              "min": 0
+            }
           }
         }
       ]
     },
     {
-      "id": "variable",
-      "nama": "Variable",
+      "id": "tampilan",
+      "nama": "Tampilan",
+      "blocks": [
+        {
+          "type": "show_text",
+          "label": "Tampilkan Kata Stage",
+          "description": "Ubah kata yang tampil di bagian atas stage.",
+          "params": {
+            "text": {
+              "label": "Kata",
+              "type": "text",
+              "value": "Halo dari block"
+            }
+          }
+        },
+        {
+          "type": "set_stage_color",
+          "label": "Ubah Warna Sprite",
+          "description": "Atur warna sprite dan judul stage.",
+          "params": {
+            "color": {
+              "label": "Warna",
+              "type": "color",
+              "value": "#0d6efd"
+            }
+          }
+        },
+        {
+          "type": "sprite_say",
+          "label": "Sprite Berkata",
+          "description": "Tampilkan kata dalam bubble sprite.",
+          "params": {
+            "text": {
+              "label": "Kata Sprite",
+              "type": "text",
+              "value": "Aku siap belajar"
+            }
+          }
+        },
+        {
+          "type": "say_message",
+          "label": "Pesan Output",
+          "description": "Tampilkan pesan di panel output.",
+          "params": {
+            "message": {
+              "label": "Pesan",
+              "type": "text",
+              "value": "Robot siap belajar"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "kontrol",
+      "nama": "Kontrol",
+      "blocks": [
+        {
+          "type": "wait_seconds",
+          "label": "Tunggu",
+          "description": "Jeda sebelum lanjut ke block berikutnya.",
+          "params": {
+            "seconds": {
+              "label": "Detik",
+              "type": "number",
+              "value": 1,
+              "min": 0
+            }
+          }
+        },
+        {
+          "type": "repeat_note",
+          "label": "Ulangi",
+          "description": "Penanda jumlah pengulangan program.",
+          "params": {
+            "times": {
+              "label": "Kali",
+              "type": "number",
+              "value": 2,
+              "min": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "sensor",
+      "nama": "Sensor",
+      "blocks": [
+        {
+          "type": "detect_distance",
+          "label": "Baca Jarak",
+          "description": "Simulasi pembacaan sensor jarak.",
+          "params": {
+            "distance": {
+              "label": "Jarak (cm)",
+              "type": "number",
+              "value": 25,
+              "min": 0
+            }
+          }
+        },
+        {
+          "type": "detect_touch",
+          "label": "Baca Sentuh",
+          "description": "Simulasi sensor sentuh aktif atau tidak.",
+          "params": {
+            "pressed": {
+              "label": "Status",
+              "type": "select",
+              "value": "tidak",
+              "options": ["tidak", "ya"]
+            }
+          }
+        },
+        {
+          "type": "detect_color",
+          "label": "Baca Warna",
+          "description": "Simulasi sensor pembaca warna.",
+          "params": {
+            "color": {
+              "label": "Warna Terbaca",
+              "type": "select",
+              "value": "biru",
+              "options": ["biru", "merah", "kuning", "hijau"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "variabel",
+      "nama": "Variabel",
       "blocks": [
         {
           "type": "set_variable",
-          "label": "Set Variable",
+          "label": "Set Variabel",
+          "description": "Buat atau isi nilai awal variabel.",
           "params": {
-            "name": "x",
-            "value": 0
+            "name": {
+              "label": "Nama",
+              "type": "text",
+              "value": "x"
+            },
+            "value": {
+              "label": "Nilai",
+              "type": "number",
+              "value": 0
+            }
           }
         },
         {
           "type": "change_variable",
-          "label": "Change Variable",
+          "label": "Ubah Variabel",
+          "description": "Tambahkan atau kurangi nilai variabel.",
           "params": {
-            "name": "x",
-            "delta": 1
+            "name": {
+              "label": "Nama",
+              "type": "text",
+              "value": "x"
+            },
+            "delta": {
+              "label": "Perubahan",
+              "type": "number",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "balok-saya",
+      "nama": "Balok Saya",
+      "blocks": [
+        {
+          "type": "custom_block",
+          "label": "Aksi Kustom",
+          "description": "Tulis aksi buatanmu sendiri sebagai catatan program.",
+          "params": {
+            "name": {
+              "label": "Nama Balok",
+              "type": "text",
+              "value": "Balok Hebat"
+            },
+            "action": {
+              "label": "Aksi",
+              "type": "text",
+              "value": "Gerak lalu berhitung"
+            }
           }
         }
       ]

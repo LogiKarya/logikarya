@@ -3,10 +3,12 @@
 // ===============================
 function initCodeRunner() {
   const runBtn = document.getElementById("run-code");
-  const editor = document.getElementById("code-editor");
+  const htmlEditor = document.getElementById("html-editor");
+  const cssEditor = document.getElementById("css-editor");
+  const jsEditor = document.getElementById("js-editor");
   const preview = document.getElementById("code-preview");
 
-  if (!runBtn || !editor || !preview) return;
+  if (!runBtn || !htmlEditor || !cssEditor || !jsEditor || !preview) return;
 
   runBtn.addEventListener("click", runCode);
 }
@@ -15,21 +17,37 @@ function initCodeRunner() {
 // RUN CODE (SAFE MODE)
 // ===============================
 function runCode() {
-  const editor = document.getElementById("code-editor");
+  const htmlEditor = document.getElementById("html-editor");
+  const cssEditor = document.getElementById("css-editor");
+  const jsEditor = document.getElementById("js-editor");
   const preview = document.getElementById("code-preview");
 
-  const code = editor.value;
+  if (!htmlEditor || !cssEditor || !jsEditor || !preview) return;
 
-  // basic sanitization (hindari script berbahaya sederhana)
-  const safeCode = sanitizeCode(code);
-  preview.srcdoc = code;
+  const safeHtml = sanitizeCode(htmlEditor.value);
+  const safeCss = sanitizeCode(cssEditor.value);
+  const safeJs = sanitizeCode(jsEditor.value);
+
+  preview.srcdoc = `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>${safeCss}</style>
+      </head>
+      <body>
+        ${safeHtml}
+        <script>${safeJs}<\/script>
+      </body>
+    </html>
+  `;
 }
 
 // ===============================
 // SANITIZE CODE (SIMPLE SECURITY)
 // ===============================
 function sanitizeCode(code) {
-  // blokir akses parent/window luar iframe
   return code
     .replace(/window\.parent/gi, "")
     .replace(/window\.top/gi, "")
@@ -39,19 +57,26 @@ function sanitizeCode(code) {
 }
 
 // ===============================
-// AUTO RUN (OPTIONAL)
+// AUTO RUN
 // ===============================
 function autoRunCode() {
-  const editor = document.getElementById("code-editor");
-  if (!editor) return;
+  const editors = [
+    document.getElementById("html-editor"),
+    document.getElementById("css-editor"),
+    document.getElementById("js-editor"),
+  ].filter(Boolean);
+
+  if (!editors.length) return;
 
   let timeout;
 
-  editor.addEventListener("input", () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      runCode();
-    }, 500); // debounce 500ms
+  editors.forEach((editor) => {
+    editor.addEventListener("input", () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        runCode();
+      }, 500);
+    });
   });
 }
 
@@ -60,5 +85,6 @@ function autoRunCode() {
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   initCodeRunner();
-  autoRunCode(); // bisa dimatikan kalau tidak mau auto-run
+  autoRunCode();
+  runCode();
 });

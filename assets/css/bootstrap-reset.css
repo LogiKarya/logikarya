@@ -22,11 +22,6 @@ textarea {
   border-bottom: 1px solid #ddd;
 }
 
-.navbar-content {
-  flex: 1;
-  justify-content: space-between;
-}
-
 /* Link navbar */
 .navbar .nav-link {
   color: #ccc !important;
@@ -131,18 +126,5 @@ ul {
 }
 
 html {
-  text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-}
-
-@media (max-width: 991.98px) {
-  .navbar {
-    position: relative;
-  }
-
-  .navbar-brand {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }

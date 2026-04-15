@@ -1,28 +1,36 @@
 <aside id="app-sidebar" class="sidebar bg-light border-end p-3">
-  <h5 class="fw-bold mb-3">Menu</h5>
+  <div class="sidebar-header d-flex align-items-center justify-content-between mb-3">
+    <h5 class="fw-bold mb-0">Menu</h5>
+  </div>
 
-  <ul class="nav flex-column">
-    <li class="nav-item mb-2">
+  <ul class="nav flex-column gap-2">
+    <li class="nav-item">
       <button
-        class="btn btn-outline-primary w-100 text-start"
-        data-section="life-math"
+        class="btn w-100 text-start sidebar-btn active"
+        data-section="home"
       >
+        Home
+      </button>
+    </li>
+
+    <li class="nav-item">
+      <button class="btn w-100 text-start sidebar-btn" data-section="life-math">
         Life Math
       </button>
     </li>
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
       <button
-        class="btn btn-outline-success w-100 text-start"
+        class="btn w-100 text-start sidebar-btn"
         data-section="project-studio"
       >
         Project Studio
       </button>
     </li>
 
-    <li class="nav-item mb-2">
+    <li class="nav-item">
       <button
-        class="btn btn-outline-warning w-100 text-start"
+        class="btn w-100 text-start sidebar-btn"
         data-section="robot-math"
         aria-label="Buka Robot Math"
       >

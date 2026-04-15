@@ -1,52 +1,39 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>SINPI</title>
+    <title>SINπ</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="assets/vendor/bs5/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/bootstrap-reset.css" />
 
-    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/home.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/lifeMath.css" />
     <link rel="stylesheet" href="assets/css/projectStudio.css" />
     <link rel="stylesheet" href="assets/css/robotMath.css" />
 
-    <!-- Canvas CSS -->
     <link rel="stylesheet" href="assets/canvas/css/whiteboard.css" />
   </head>
 
   <body>
-    <!-- =========================
-         NAVBAR
-    ========================== -->
     <div id="navbar"></div>
 
-    <!-- =========================
-         SIDEBAR OVERLAY (FIX: MOVE HERE)
-    ========================== -->
     <div
       id="sidebar-overlay"
       class="sidebar-overlay"
       onclick="closeSidebar()"
     ></div>
 
-    <!-- =========================
-         APP LAYOUT WRAPPER (FIX IMPORTANT)
-    ========================== -->
     <div class="app-layout d-flex">
-      <!-- SIDEBAR -->
       <div id="sidebar"></div>
 
-      <!-- MAIN CONTENT -->
       <main id="main-content" class="main-content flex-grow-1 p-3">
-        <!-- ===== LIFE MATH ===== -->
-        <section id="life-math" class="section active">
-          <h1>Life Math</h1>
+        <div id="home-container"></div>
 
+        <section id="life-math" class="section">
+          <h1>Life Math</h1>
           <div class="card p-3 mb-3" id="teori-card">
             <h2>Teori</h2>
             <p class="formula">v = s / t</p>
@@ -70,91 +57,541 @@
           </div>
         </section>
 
-        <!-- ===== PROJECT STUDIO ===== -->
         <section id="project-studio" class="section">
           <h1>Project Studio</h1>
+          <div class="project-submenu" id="project-submenu">
+            <button
+              type="button"
+              class="project-submenu-btn active"
+              data-project="design"
+            >
+              Design
+            </button>
+            <button
+              type="button"
+              class="project-submenu-btn"
+              data-project="science"
+            >
+              Sains & Lingkungan
+            </button>
+            <button
+              type="button"
+              class="project-submenu-btn"
+              data-project="economy"
+            >
+              Ekonomi
+            </button>
+            <button
+              type="button"
+              class="project-submenu-btn"
+              data-project="technology"
+            >
+              Teknologi
+            </button>
+          </div>
 
-          <div class="project-grid">
-            <div class="project-card">
-              <h2>Design</h2>
-              <canvas id="design-canvas" width="400" height="300"></canvas>
-            </div>
+          <div class="project-panels">
+            <article
+              class="project-panel active"
+              id="project-panel-design"
+              data-project-panel="design"
+            >
+              <div class="project-panel-header">
+                <span class="project-badge">Design</span>
+                <h2>Whiteboard Design</h2>
+                <p>
+                  Gunakan whiteboard untuk menggambar konsep kota, produk, atau
+                  layout visual.
+                </p>
+              </div>
+              <div class="design-studio-layout">
+                <aside class="design-tools-panel">
+                  <div class="design-tool-card">
+                    <h3>Input Gambar</h3>
+                    <input
+                      id="design-image-input"
+                      type="file"
+                      accept="image/*"
+                      title="Upload an image file"
+                    />
+                    <button
+                      id="design-add-image"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan ke Canvas
+                    </button>
+                  </div>
 
-            <div class="project-card">
-              <h2>Sains & Lingkungan</h2>
-              <canvas id="canvas-science" width="400" height="300"></canvas>
-            </div>
+                  <div class="design-tool-card">
+                    <h3>Tools Grafik</h3>
+                    <label for="design-chart-title">Judul</label>
+                    <input
+                      id="design-chart-title"
+                      type="text"
+                      value="Grafik Design"
+                    />
+                    <label for="design-chart-values"
+                      >Data (pisahkan koma)</label
+                    >
+                    <input
+                      id="design-chart-values"
+                      type="text"
+                      value="12,18,10,24"
+                    />
+                    <button
+                      id="design-add-chart"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Grafik
+                    </button>
+                  </div>
 
-            <div class="project-card">
-              <h2>Teknologi</h2>
+                  <div class="design-tool-card">
+                    <h3>Tools Table</h3>
+                    <label for="design-table-title">Judul</label>
+                    <input
+                      id="design-table-title"
+                      type="text"
+                      value="Tabel Ide Design"
+                    />
+                    <label for="design-table-data"
+                      >Isi baris (pakai ; dan |)</label
+                    >
+                    <textarea id="design-table-data" rows="5">
+Bagian|Fungsi;Atap|Pelindung;Ruang Hijau|Sirkulasi</textarea
+                    >
+                    <button
+                      id="design-add-table"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Table
+                    </button>
+                  </div>
+                </aside>
 
-              <label for="code-editor">Code Editor:</label>
-              <textarea id="code-editor" class="code-editor">
-<h3>Hello World</h3>
-<script>
-  console.log("Hello, SINPI!");
-</script>
-              </textarea>
+                <div
+                  class="whiteboard-container project-board-shell design-board-shell"
+                >
+                  <div
+                    id="design-whiteboard-toolbar"
+                    class="whiteboard-toolbar project-toolbar"
+                  ></div>
+                  <div
+                    class="whiteboard-wrapper project-whiteboard-wrapper design-whiteboard-wrapper"
+                  >
+                    <canvas
+                      id="design-whiteboard"
+                      class="project-whiteboard-canvas"
+                    ></canvas>
+                  </div>
+                </div>
+              </div>
+            </article>
 
-              <button id="run-code" class="btn btn-primary mt-2">
-                Run Code
-              </button>
+            <article
+              class="project-panel"
+              id="project-panel-science"
+              data-project-panel="science"
+            >
+              <div class="project-panel-header">
+                <span class="project-badge">Sains & Lingkungan</span>
+                <h2>Whiteboard Sains & Lingkungan</h2>
+                <p>
+                  Visualisasikan cuaca, ekosistem, alur penelitian, atau
+                  eksperimen sederhana.
+                </p>
+              </div>
+              <div class="design-studio-layout">
+                <aside class="design-tools-panel">
+                  <div class="design-tool-card">
+                    <h3>Input Gambar</h3>
+                    <input
+                      id="science-image-input"
+                      type="file"
+                      accept="image/*"
+                      title="Upload an image file"
+                    />
+                    <button
+                      id="science-add-image"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan ke Canvas
+                    </button>
+                  </div>
 
-              <iframe
-                id="code-preview"
-                title="Code Preview Output"
-                class="code-preview-iframe mt-2"
-                sandbox="allow-scripts"
-              ></iframe>
-            </div>
+                  <div class="design-tool-card">
+                    <h3>Tools Grafik</h3>
+                    <label for="science-chart-title">Judul</label>
+                    <input
+                      id="science-chart-title"
+                      type="text"
+                      value="Grafik Sains"
+                    />
+                    <label for="science-chart-values"
+                      >Data (pisahkan koma)</label
+                    >
+                    <input
+                      id="science-chart-values"
+                      type="text"
+                      value="22,30,28,35"
+                    />
+                    <button
+                      id="science-add-chart"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Grafik
+                    </button>
+                  </div>
 
-            <div class="project-card">
-              <h2>Ekonomi</h2>
-              <canvas id="canvas-economy" width="400" height="300"></canvas>
-            </div>
+                  <div class="design-tool-card">
+                    <h3>Tools Table</h3>
+                    <label for="science-table-title">Judul</label>
+                    <input
+                      id="science-table-title"
+                      type="text"
+                      value="Tabel Observasi"
+                    />
+                    <label for="science-table-data"
+                      >Isi baris (pakai ; dan |)</label
+                    >
+                    <textarea id="science-table-data" rows="5">
+Variabel|Nilai;Suhu|29C;Kelembapan|82%</textarea
+                    >
+                    <button
+                      id="science-add-table"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Table
+                    </button>
+                  </div>
+                </aside>
+
+                <div
+                  class="whiteboard-container project-board-shell design-board-shell"
+                >
+                  <div
+                    id="science-whiteboard-toolbar"
+                    class="whiteboard-toolbar project-toolbar"
+                  ></div>
+                  <div
+                    class="whiteboard-wrapper project-whiteboard-wrapper design-whiteboard-wrapper"
+                  >
+                    <canvas
+                      id="science-whiteboard"
+                      class="project-whiteboard-canvas"
+                    ></canvas>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="project-panel"
+              id="project-panel-economy"
+              data-project-panel="economy"
+            >
+              <div class="project-panel-header">
+                <span class="project-badge">Ekonomi</span>
+                <h2>Whiteboard Ekonomi</h2>
+                <p>
+                  Susun ide bisnis, diagram modal, alur pemasaran, dan strategi
+                  penjualan.
+                </p>
+              </div>
+              <div class="design-studio-layout">
+                <aside class="design-tools-panel">
+                  <div class="design-tool-card">
+                    <h3>Input Gambar</h3>
+                    <input
+                      id="economy-image-input"
+                      type="file"
+                      accept="image/*"
+                      title="Upload an image file"
+                    />
+                    <button
+                      id="economy-add-image"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan ke Canvas
+                    </button>
+                  </div>
+
+                  <div class="design-tool-card">
+                    <h3>Tools Grafik</h3>
+                    <label for="economy-chart-title">Judul</label>
+                    <input
+                      id="economy-chart-title"
+                      type="text"
+                      value="Grafik Penjualan"
+                    />
+                    <label for="economy-chart-values"
+                      >Data (pisahkan koma)</label
+                    >
+                    <input
+                      id="economy-chart-values"
+                      type="text"
+                      value="15,24,18,30"
+                    />
+                    <button
+                      id="economy-add-chart"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Grafik
+                    </button>
+                  </div>
+
+                  <div class="design-tool-card">
+                    <h3>Tools Table</h3>
+                    <label for="economy-table-title">Judul</label>
+                    <input
+                      id="economy-table-title"
+                      type="text"
+                      value="Tabel Strategi Bisnis"
+                    />
+                    <label for="economy-table-data"
+                      >Isi baris (pakai ; dan |)</label
+                    >
+                    <textarea id="economy-table-data" rows="5">
+Bagian|Rencana;Produk|Paket Hemat;Promosi|Media Sosial</textarea
+                    >
+                    <button
+                      id="economy-add-table"
+                      type="button"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Tambahkan Table
+                    </button>
+                  </div>
+                </aside>
+
+                <div
+                  class="whiteboard-container project-board-shell design-board-shell"
+                >
+                  <div
+                    id="economy-whiteboard-toolbar"
+                    class="whiteboard-toolbar project-toolbar"
+                  ></div>
+                  <div
+                    class="whiteboard-wrapper project-whiteboard-wrapper design-whiteboard-wrapper"
+                  >
+                    <canvas
+                      id="economy-whiteboard"
+                      class="project-whiteboard-canvas"
+                    ></canvas>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="project-panel"
+              id="project-panel-technology"
+              data-project-panel="technology"
+            >
+              <div class="project-panel-header">
+                <span class="project-badge">Teknologi</span>
+                <h2>Source Code Teknologi</h2>
+                <p>
+                  Tulis HTML, CSS, dan JavaScript secara terpisah lalu jalankan
+                  preview langsung.
+                </p>
+              </div>
+              <div class="technology-layout">
+                <div class="technology-editors">
+                  <div class="technology-editor-card">
+                    <label for="html-editor">HTML</label>
+                    <textarea id="html-editor" class="technology-editor">
+<main class="tech-app">
+  <h1>Halo Teknologi</h1>
+  <p>Preview ini berasal dari HTML, CSS, dan JavaScript terpisah.</p>
+  <button id="tech-button">Klik Saya</button>
+  <p id="tech-output"></p>
+</main></textarea
+                    >
+                  </div>
+                  <div class="technology-editor-card">
+                    <label for="css-editor">CSS</label>
+                    <textarea id="css-editor" class="technology-editor">
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  padding: 24px;
+}
+
+.tech-app {
+  max-width: 520px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+}
+
+#tech-button {
+  border: 0;
+  background: #2563eb;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 999px;
+}</textarea
+                    >
+                  </div>
+                  <div class="technology-editor-card">
+                    <label for="js-editor">JavaScript</label>
+                    <textarea id="js-editor" class="technology-editor">
+const button = document.getElementById("tech-button");
+const output = document.getElementById("tech-output");
+
+button.addEventListener("click", () => {
+  output.textContent = "JavaScript berhasil dijalankan.";
+});</textarea
+                    >
+                  </div>
+                </div>
+
+                <div class="technology-preview-card">
+                  <div class="technology-preview-actions">
+                    <button id="run-code" class="btn btn-primary" type="button">
+                      Run Code
+                    </button>
+                  </div>
+                  <iframe
+                    id="code-preview"
+                    title="Code Preview Output"
+                    class="code-preview-iframe"
+                    sandbox="allow-scripts"
+                  ></iframe>
+                </div>
+              </div>
+            </article>
           </div>
         </section>
 
-        <!-- == Robot Math == -->
         <section id="robot-math" class="section">
           <h1>Robot Math</h1>
 
           <div class="robot-container d-flex">
-            <!-- Sidebar Category -->
-            <div class="robot-sidebar">
-              <button onclick="showCategory('motion')">Motion</button>
-              <button onclick="showCategory('control')">Control</button>
-              <button onclick="showCategory('event')">Event</button>
-              <button onclick="showCategory('operator')">Operator</button>
-              <button onclick="showCategory('variable')">Variable</button>
+            <div class="robot-sidebar" id="robot-category-list">
+              <button onclick="showCategory('kejadian')">Kejadian</button>
+              <button onclick="showCategory('gerakan')">Gerakan</button>
+              <button onclick="showCategory('operasi')">Operasi</button>
+              <button onclick="showCategory('tampilan')">Tampilan</button>
+              <button onclick="showCategory('kontrol')">Kontrol</button>
+              <button onclick="showCategory('sensor')">Sensor</button>
+              <button onclick="showCategory('variabel')">Variabel</button>
+              <button onclick="showCategory('balok-saya')">Balok Saya</button>
             </div>
 
-            <!-- Block Palette -->
             <div class="block-palette" id="palette"></div>
 
-            <!-- Workspace -->
-            <div class="workspace" id="workspace"></div>
+            <div class="workspace-wrapper">
+              <div class="workspace-toolbar">
+                <span>Workspace</span>
+                <div class="workspace-controls">
+                  <span class="workspace-zoom-label" id="workspace-zoom-label">
+                    100%
+                  </span>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    onclick="clearWorkspace()"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+              <div class="workspace-stage" id="workspace-stage">
+                <div class="workspace-zoom-shell">
+                  <div class="workspace" id="workspace">
+                    <p class="workspace-placeholder">
+                      Drag block ke sini. Ubah parameternya, atur urutan, lalu
+                      tekan Run. Gunakan scroll mouse di area ini untuk zoom.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <!-- Output -->
             <div class="robot-output">
-              <canvas id="robot-canvas" width="400" height="300"></canvas>
-              <button onclick="runProgram()" class="btn btn-success mt-2">
-                ▶ Run
-              </button>
+              <div class="stage-panel card">
+                <div class="card-body">
+                  <div class="stage-header">
+                    <h2 class="h5 mb-0">Stage</h2>
+                    <div class="stage-inline-tools">
+                      <label class="stage-inline-label" for="stage-image-input">
+                        Gambar
+                      </label>
+                      <input
+                        id="stage-image-input"
+                        type="file"
+                        accept="image/*"
+                        onchange="handleStageImage(event)"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="stage-settings">
+                    <div class="stage-field">
+                      <label for="stage-text">Kata Stage</label>
+                      <input
+                        id="stage-text"
+                        type="text"
+                        value="Halo Robot Math"
+                        oninput="updateStageSettings()"
+                      />
+                    </div>
+                    <div class="stage-field">
+                      <label for="stage-color">Warna Sprite</label>
+                      <input
+                        id="stage-color"
+                        type="color"
+                        value="#0d6efd"
+                        oninput="updateStageSettings()"
+                      />
+                    </div>
+                  </div>
+
+                  <p class="stage-help">
+                    Sprite bisa dipindahkan langsung dengan drag di stage.
+                  </p>
+                  <canvas id="robot-canvas" width="420" height="320"></canvas>
+                </div>
+              </div>
+
+              <div class="robot-output-actions">
+                <button onclick="runProgram()" class="btn btn-success">
+                  Run
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  onclick="resetRobotOutput()"
+                >
+                  Reset
+                </button>
+              </div>
+              <div class="robot-log" id="robot-log" aria-live="polite">
+                Tambahkan block seperti Start, Move Forward, dan Triangle Area.
+              </div>
             </div>
           </div>
         </section>
       </main>
     </div>
- 
-    <!-- FOOTER -->
+
     <div id="footer"></div>
 
-    <!-- =========================
-         SCRIPTS
-    ========================== -->
     <script src="assets/vendor/bs5/js/bootstrap.bundle.min.js"></script>
 
+    <script src="assets/js/home.js" defer></script>
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/lifeMath.js" defer></script>
     <script src="assets/js/projectStudio.js" defer></script>
