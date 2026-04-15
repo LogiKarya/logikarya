@@ -26,7 +26,7 @@ async function loadComponent(id, path) {
 // ===============================
 document.addEventListener("DOMContentLoaded", async () => {
   const navbarEl = await loadComponent("navbar", "components/navbar.html");
-  await loadComponent("home-container", "components/home.html");
+  const homeEl = await loadComponent("home-container", "components/home.html");
   const sidebarEl = await loadComponent("sidebar", "components/sidebar.html");
 
   await loadComponent(
@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadComponent("footer", "components/footer.html");
 
   if (navbarEl) initNavbarEvents();
+  if (homeEl && typeof initHome === "function") initHome();
   if (sidebarEl) initSidebarEvents();
 
   if (typeof initTools === "function") {
