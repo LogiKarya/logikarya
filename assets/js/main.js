@@ -65,6 +65,7 @@ function showSection(id) {
 
   syncSidebarActive(id);
   updateToolbarTitle(id);
+  updateAutoSidebarState(id);
   refreshVisibleCanvases(id);
 
   if (window.innerWidth <= 768) {
@@ -237,6 +238,26 @@ function toggleFullscreen() {
 
 function toggleTheme() {
   document.body.classList.toggle("dark-mode");
+}
+
+function updateAutoSidebarState(sectionId) {
+  const appLayout = document.querySelector(".app-layout");
+  const toggleButton = document.getElementById("btn-toggle-sidebar");
+  if (!appLayout) return;
+
+  if (window.innerWidth <= 768) {
+    if (toggleButton) {
+      toggleButton.setAttribute("aria-expanded", "false");
+    }
+    return;
+  }
+
+  const shouldHideSidebar = sectionId !== "home";
+  appLayout.classList.toggle("sidebar-hidden", shouldHideSidebar);
+
+  if (toggleButton) {
+    toggleButton.setAttribute("aria-expanded", String(!shouldHideSidebar));
+  }
 }
 
 function refreshVisibleCanvases(sectionId) {

@@ -1,6 +1,3 @@
-/* ===============================
-   WHITEBOARD CONTAINER
-================================ */
 .whiteboard-container {
   display: flex;
   flex-direction: column;
@@ -8,13 +5,10 @@
   gap: 10px;
 }
 
-/* ===============================
-   TOOLBAR (CANVAS)
-================================ */
 .whiteboard-toolbar {
   border: 1px solid #d4deea;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -39,23 +33,21 @@
   white-space: nowrap;
 }
 
-.whiteboard-toolbar-control {
-  padding: 0 2px;
-}
-
 .whiteboard-toolbar-control label {
   font-size: 0.76rem;
   font-weight: 700;
   color: #5a728d;
 }
 
+.whiteboard-toolbar-control select,
+.whiteboard-toolbar-control input[type="range"] {
+  min-width: 84px;
+}
+
 .whiteboard-toolbar-group-end {
   margin-left: auto;
 }
 
-/* ===============================
-   WRAPPER (AREA CANVAS)
-================================ */
 .whiteboard-wrapper {
   height: 500px;
   position: relative;
@@ -67,49 +59,6 @@
   min-height: 360px;
 }
 
-/* ===============================
-   CANVAS
-================================ */
-#whiteboard {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background-color: #ffffff;
-  cursor: crosshair;
-  position: relative;
-  z-index: 1;
-}
-
-.whiteboard-object-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.whiteboard-text-item {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  border: 1px solid transparent;
-  border-radius: 12px;
-  padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
-  font-weight: 600;
-  line-height: 1.3;
-  white-space: pre-wrap;
-  cursor: move;
-  pointer-events: auto;
-}
-
-.whiteboard-text-item.active {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
-}
-
-/* ===============================
-   GRID BACKGROUND (OPTIONAL EFFECT)
-================================ */
 .whiteboard-wrapper::before {
   content: "";
   position: absolute;
@@ -121,42 +70,191 @@
   pointer-events: none;
 }
 
-/* ===============================
-   TOOL BUTTON ACTIVE STATE
-================================ */
-.whiteboard-toolbar .btn.active {
-  background-color: #0d6efd;
-  color: #fff;
+#whiteboard,
+.project-whiteboard-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* ===============================
-   INPUT (COLOR & RANGE)
-================================ */
-.whiteboard-toolbar input[type="range"] {
-  width: 80px;
+.whiteboard-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
 
-.whiteboard-toolbar input[type="color"] {
-  padding: 0;
-  border: none;
-  width: 32px;
-  height: 32px;
+.whiteboard-object {
+  position: absolute;
+  min-width: 24px;
+  min-height: 24px;
+  user-select: none;
+  cursor: move;
 }
 
-/* ===============================
-   DARK MODE
-================================ */
-.dark-mode .whiteboard-wrapper {
-  background: linear-gradient(180deg, #162235 0%, #111b2a 100%);
-  border-color: #365273;
+.whiteboard-object.selected {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
 }
 
-.dark-mode #whiteboard {
-  background-color: #2a2a2a;
+.whiteboard-object.type-text,
+.whiteboard-object.type-text-frame,
+.whiteboard-object.type-image,
+.whiteboard-object.type-table,
+.whiteboard-object.type-chart {
+  border-radius: 18px;
+}
+
+.whiteboard-object-content {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: 0;
+  background: transparent;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.whiteboard-vector {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.whiteboard-object-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 18px;
+  display: block;
+}
+
+.whiteboard-chart,
+.whiteboard-table-card {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.whiteboard-chart-title,
+.whiteboard-table-title {
+  font-weight: 700;
+  color: #173250;
+}
+
+.whiteboard-chart-bars {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  flex: 1;
+}
+
+.whiteboard-chart-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.whiteboard-chart-bar-wrap span,
+.whiteboard-chart-bar-wrap small {
+  font-size: 0.72rem;
+  color: #60758c;
+}
+
+.whiteboard-chart-bar {
+  width: 100%;
+  min-height: 16px;
+  border-radius: 12px 12px 4px 4px;
+}
+
+.whiteboard-chart-line {
+  width: 100%;
+  height: 100%;
+  min-height: 110px;
+}
+
+.whiteboard-chart-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: #60758c;
+}
+
+.whiteboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.whiteboard-table th,
+.whiteboard-table td {
+  border: 1px solid #d7e1ee;
+  padding: 8px 10px;
+  text-align: left;
+  background: #fff;
+}
+
+.whiteboard-table th {
+  background: #eef4ff;
+  font-weight: 700;
+}
+
+.whiteboard-table-cell {
+  outline: none;
+}
+
+.whiteboard-resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #2563eb;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.94);
+}
+
+.whiteboard-resize-handle.handle-nw {
+  left: -6px;
+  top: -6px;
+  cursor: nwse-resize;
+}
+
+.whiteboard-resize-handle.handle-ne {
+  right: -6px;
+  top: -6px;
+  cursor: nesw-resize;
+}
+
+.whiteboard-resize-handle.handle-sw {
+  left: -6px;
+  bottom: -6px;
+  cursor: nesw-resize;
+}
+
+.whiteboard-resize-handle.handle-se {
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
 }
 
 .dark-mode .whiteboard-toolbar {
-  background: rgba(20, 32, 49, 0.88);
+  background: rgba(20, 32, 49, 0.92);
   border-color: #365273;
 }
 
@@ -164,15 +262,26 @@
   color: #bfd0e2;
 }
 
-.dark-mode .whiteboard-text-item {
-  background: rgba(15, 26, 40, 0.88);
-  box-shadow: 0 6px 16px rgba(2, 8, 23, 0.28);
+.dark-mode .whiteboard-wrapper {
+  background: linear-gradient(180deg, #162235 0%, #111b2a 100%);
+  border-color: #365273;
 }
 
 .dark-mode .whiteboard-wrapper::before {
   background-image:
-    linear-gradient(#333 1px, transparent 1px),
-    linear-gradient(90deg, #333 1px, transparent 1px);
+    linear-gradient(#2a3b52 1px, transparent 1px),
+    linear-gradient(90deg, #2a3b52 1px, transparent 1px);
+}
+
+.dark-mode .whiteboard-table th,
+.dark-mode .whiteboard-table td {
+  border-color: #365273;
+  background: #142031;
+  color: #e5eef8;
+}
+
+.dark-mode .whiteboard-table th {
+  background: #1a2a40;
 }
 
 @media (max-width: 768px) {

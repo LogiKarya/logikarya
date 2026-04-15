@@ -211,7 +211,11 @@
   min-height: 720px;
   overflow: auto;
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 36%),
+    radial-gradient(
+      circle at top left,
+      rgba(56, 189, 248, 0.12),
+      transparent 36%
+    ),
     linear-gradient(180deg, #fcfeff 0%, #f3f8ff 100%);
 }
 
@@ -452,7 +456,11 @@
   gap: 10px;
   border-radius: 18px;
   background:
-    radial-gradient(circle at top right, rgba(251, 191, 36, 0.18), transparent 30%),
+    radial-gradient(
+      circle at top right,
+      rgba(251, 191, 36, 0.18),
+      transparent 30%
+    ),
     linear-gradient(180deg, #f6fbff 0%, #eef5ff 100%);
 }
 
