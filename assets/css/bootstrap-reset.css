@@ -1,130 +1,39 @@
-/* ===============================
-   RESET BOOTSTRAP DEFAULT STYLE
-================================ */
-
-/* Hilangkan shadow default */
 .btn,
 .card,
 .navbar {
   box-shadow: none !important;
 }
 
-/* Border radius konsisten */
 .btn,
 .card,
 .form-control,
-textarea {
-  border-radius: 8px !important;
+textarea,
+input,
+select {
+  border-radius: inherit;
 }
 
-/* Navbar lebih clean */
-.navbar {
-  border-bottom: 1px solid #ddd;
-}
-
-/* Link navbar */
-.navbar .nav-link {
-  color: #ccc !important;
-  transition: 0.2s;
-}
-
-.navbar .nav-link:hover,
-.navbar .nav-link.active {
-  color: #ffffff !important;
-}
-
-/* Button lebih smooth */
-.btn {
-  transition: all 0.2s ease;
-}
-
-/* Hover effect */
-.btn:hover {
-  transform: translateY(-1px);
-  opacity: 0.9;
-}
-
-/* Card lebih modern */
-.card {
-  border: 1px solid #e5e5e5 !important;
-  padding: 15px;
-}
-
-/* Form control */
-.form-control:focus,
-textarea:focus {
+.navbar-toggler,
+.btn-close {
   box-shadow: none !important;
-  border-color: #666;
 }
 
-/* Range input */
-input[type="range"] {
-  cursor: pointer;
+.navbar-toggler:focus,
+.btn:focus,
+.form-control:focus {
+  box-shadow: none !important;
 }
 
-/* Color picker */
-input[type="color"] {
-  border: none;
-  background: none;
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
+.container,
+.container-fluid {
+  padding-left: max(1rem, 2vw);
+  padding-right: max(1rem, 2vw);
 }
 
-/* List */
-ul {
-  margin-bottom: 0;
+.text-muted {
+  color: #6c7f95 !important;
 }
 
-/* Badge */
-.badge {
-  font-size: 0.75rem;
-}
-
-/* Scrollbar (modern look) */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #bbb;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #888;
-}
-
-/* ===============================
-   DARK MODE SUPPORT
-================================ */
-.dark-mode .navbar {
-  background-color: #1a1a1a !important;
-  border-color: #333;
-}
-
-.dark-mode .navbar .nav-link {
-  color: #aaa !important;
-}
-
-.dark-mode .navbar .nav-link:hover,
-.dark-mode .navbar .nav-link.active {
-  color: #fff !important;
-}
-
-.dark-mode .btn {
-  border-color: #444;
-  color: #ddd;
-}
-
-.dark-mode .btn:hover {
-  background-color: #333;
-}
-
-.dark-mode .card {
-  border-color: #333 !important;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
+.dark-mode .text-muted {
+  color: #9fb1c7 !important;
 }

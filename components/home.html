@@ -1,40 +1,59 @@
 <!-- == HOME == -->
 <section id="home" class="section active">
-  <div class="container py-5">
-    <!-- HERO -->
-    <div class="text-center py-5">
-      <h1 class="mb-3">
-        <img 
-          src="assets/img/logo.png" 
-          alt="SINπ" 
+  <div class="container home-shell py-4">
+    <div class="home-hero">
+      <div class="home-hero-copy">
+        <span class="home-eyebrow">Platform Edukasi Interaktif</span>
+        <h1 class="mb-3">
+          Belajar matematika, sains, dan teknologi dengan alur yang lebih jelas.
+        </h1>
+        <p class="lead text-muted">
+          SINπ membantu siswa memahami konsep melalui problem nyata, studio
+          proyek, dan latihan visual yang terstruktur serta mudah diikuti.
+        </p>
+        <div class="home-hero-actions">
+          <button class="btn btn-primary" data-section="life-math">
+            Mulai Belajar
+          </button>
+          <button class="btn btn-outline-light" data-section="project-studio">
+            Lihat Project Studio
+          </button>
+        </div>
+      </div>
+
+      <div class="home-hero-brand">
+        <img
+          src="assets/img/logo.png"
+          alt="SINπ"
           class="img-fluid d-block mx-auto logo"
-        >
-      </h1>
-
-      <p class="lead text-muted">
-        Belajar <strong>matematika</strong>, <strong>teknologi</strong>,
-        <strong>rekayasa</strong> dan <strong>sains</strong> melalui masalah
-        kehidupan sehari-hari dengan cara yang lebih menarik.
-      </p>
-
-      <button class="btn btn-primary btn-lg mt-3 px-4" data-section="life-math">
-        Mulai Belajar
-      </button>
+        />
+        <div class="home-metrics">
+          <div class="home-metric">
+            <strong>3</strong>
+            <span>Mode belajar utama</span>
+          </div>
+          <div class="home-metric">
+            <strong>1</strong>
+            <span>Workspace terpadu</span>
+          </div>
+          <div class="home-metric">
+            <strong>100%</strong>
+            <span>Fokus praktik</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- FEATURES -->
-    <div class="row g-4">
-      <!-- Life Math -->
+    <div class="row g-3 home-feature-grid">
       <div class="col-md-4">
-        <div class="card h-100 shadow-sm border-0 text-center p-4">
-          <h3 class="mb-3">Life Math</h3>
-
+        <div class="card h-100 border-0 feature-card feature-card-primary">
+          <span class="feature-tag">Konsep</span>
+          <h3 class="mb-2">Life Math</h3>
           <p class="text-muted">
             Pelajari konsep matematika melalui masalah kehidupan nyata.
           </p>
-
           <button
-            class="btn btn-outline-primary mt-auto"
+            class="btn btn-outline-primary mt-auto align-self-start"
             data-section="life-math"
           >
             Pelajari Lebih Lanjut
@@ -42,17 +61,15 @@
         </div>
       </div>
 
-      <!-- Project Studio -->
       <div class="col-md-4">
-        <div class="card h-100 shadow-sm border-0 text-center p-4">
-          <h3 class="mb-3">Project Studio</h3>
-
+        <div class="card h-100 border-0 feature-card feature-card-success">
+          <span class="feature-tag">Kreasi</span>
+          <h3 class="mb-2">Project Studio</h3>
           <p class="text-muted">
             Bangun proyek kreatif dan eksplorasi teknologi.
           </p>
-
           <button
-            class="btn btn-outline-success mt-auto"
+            class="btn btn-outline-success mt-auto align-self-start"
             data-section="project-studio"
           >
             Pelajari Lebih Lanjut
@@ -60,17 +77,15 @@
         </div>
       </div>
 
-      <!-- Robot Math -->
       <div class="col-md-4">
-        <div class="card h-100 shadow-sm border-0 text-center p-4">
-          <h3 class="mb-3">Robot Math</h3>
-
+        <div class="card h-100 border-0 feature-card feature-card-warning">
+          <span class="feature-tag">Eksperimen</span>
+          <h3 class="mb-2">Robot Math</h3>
           <p class="text-muted">
             Belajar logika dan pemrograman visual berbasis blok.
           </p>
-
           <button
-            class="btn btn-outline-warning mt-auto"
+            class="btn btn-outline-warning mt-auto align-self-start"
             data-section="robot-math"
           >
             Mulai Coding

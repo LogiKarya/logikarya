@@ -52,8 +52,12 @@
 
           <div class="card p-3" id="solving-card">
             <h2>Solving</h2>
-            <div id="whiteboard-toolbar"></div>
-            <canvas id="whiteboard" width="800" height="500"></canvas>
+            <div class="whiteboard-container life-math-whiteboard-container">
+              <div id="whiteboard-toolbar" class="whiteboard-toolbar"></div>
+              <div class="whiteboard-wrapper">
+                <canvas id="whiteboard" width="800" height="500"></canvas>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -479,15 +483,46 @@ button.addEventListener("click", () => {
           <h1>Robot Math</h1>
 
           <div class="robot-container d-flex">
-            <div class="robot-sidebar" id="robot-category-list">
-              <button onclick="showCategory('kejadian')">Kejadian</button>
-              <button onclick="showCategory('gerakan')">Gerakan</button>
-              <button onclick="showCategory('operasi')">Operasi</button>
-              <button onclick="showCategory('tampilan')">Tampilan</button>
-              <button onclick="showCategory('kontrol')">Kontrol</button>
-              <button onclick="showCategory('sensor')">Sensor</button>
-              <button onclick="showCategory('variabel')">Variabel</button>
-              <button onclick="showCategory('balok-saya')">Balok Saya</button>
+            <div class="robot-sidebar" id="robot-category-panel">
+              <div class="robot-sidebar-header">
+                <div>
+                  <h2 class="robot-sidebar-title">Kategori</h2>
+                  <p class="robot-sidebar-subtitle">
+                    Pilih kelompok blok yang ingin dipakai.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="robot-sidebar-toggle"
+                  id="robot-category-toggle"
+                  onclick="toggleRobotCategoryList()"
+                >
+                  Hide
+                </button>
+              </div>
+              <div class="robot-category-list" id="robot-category-list">
+                <button onclick="showCategory('gerakan-robot')">
+                  Gerakan Robot
+                </button>
+                <button onclick="showCategory('tampilan-output')">
+                  Tampilan & Output
+                </button>
+                <button onclick="showCategory('kejadian')">Kejadian</button>
+                <button onclick="showCategory('kontrol')">Kontrol</button>
+                <button onclick="showCategory('operator-matematika')">
+                  Operator Matematika
+                </button>
+                <button onclick="showCategory('matematika-lanjutan')">
+                  Matematika Lanjutan
+                </button>
+                <button onclick="showCategory('logika-perbandingan')">
+                  Logika & Perbandingan
+                </button>
+                <button onclick="showCategory('variabel')">Variabel</button>
+                <button onclick="showCategory('fungsi')">
+                  Fungsi / Balok Saya
+                </button>
+              </div>
             </div>
 
             <div class="block-palette" id="palette"></div>
@@ -520,11 +555,11 @@ button.addEventListener("click", () => {
               </div>
             </div>
 
-            <div class="robot-output">
+            <div class="robot-target-column">
               <div class="stage-panel card">
                 <div class="card-body">
                   <div class="stage-header">
-                    <h2 class="h5 mb-0">Stage</h2>
+                    <h2 class="h5 mb-0">Stage Wrapper</h2>
                     <div class="stage-inline-tools">
                       <label class="stage-inline-label" for="stage-image-input">
                         Gambar
@@ -540,11 +575,11 @@ button.addEventListener("click", () => {
 
                   <div class="stage-settings">
                     <div class="stage-field">
-                      <label for="stage-text">Kata Stage</label>
+                      <label for="stage-text">Judul Stage</label>
                       <input
                         id="stage-text"
                         type="text"
-                        value="Halo Robot Math"
+                        value="Robot Math"
                         oninput="updateStageSettings()"
                       />
                     </div>
@@ -561,25 +596,88 @@ button.addEventListener("click", () => {
 
                   <p class="stage-help">
                     Sprite bisa dipindahkan langsung dengan drag di stage.
+                    Gunakan blok untuk menjalankan gerak robot dan ekspresi
+                    matematika.
                   </p>
-                  <canvas id="robot-canvas" width="420" height="320"></canvas>
+                  <div class="stage-wrapper" id="stage-wrapper">
+                    <div class="stage-runbar">
+                      <button
+                        onclick="runProgram()"
+                        class="btn btn-success stage-run-button"
+                        type="button"
+                      >
+                        Run
+                      </button>
+                    </div>
+                    <canvas id="robot-canvas" width="520" height="340"></canvas>
+                  </div>
                 </div>
               </div>
 
-              <div class="robot-output-actions">
-                <button onclick="runProgram()" class="btn btn-success">
-                  Run
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  onclick="resetRobotOutput()"
-                >
-                  Reset
-                </button>
-              </div>
-              <div class="robot-log" id="robot-log" aria-live="polite">
-                Tambahkan block seperti Start, Move Forward, dan Triangle Area.
+              <div class="target-pane" id="target-pane">
+                <section class="target-card robot-info" id="robot-info">
+                  <h3>Robot Info</h3>
+                  <div class="target-grid">
+                    <div>
+                      <strong>X:</strong> <span id="robot-pos-x">80</span>
+                    </div>
+                    <div>
+                      <strong>Y:</strong> <span id="robot-pos-y">190</span>
+                    </div>
+                    <div>
+                      <strong>Arah:</strong> <span id="robot-angle">0</span>
+                    </div>
+                    <div>
+                      <strong>Status:</strong>
+                      <span id="robot-status">Siap</span>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="target-card math-panel" id="math-panel">
+                  <h3>Math Panel</h3>
+                  <div id="math-expression">Ekspresi: -</div>
+                  <div id="math-result">Hasil: -</div>
+                  <div id="math-realtime">
+                    Realtime: menunggu blok dijalankan.
+                  </div>
+                </section>
+
+                <section class="target-card output-panel" id="output-panel">
+                  <h3>Output Panel</h3>
+                  <div class="robot-log" id="robot-log" aria-live="polite">
+                    Tambahkan blok Robot Math untuk mulai menyusun program.
+                  </div>
+                </section>
+
+                <section class="target-card control-panel" id="control-panel">
+                  <h3>Control Panel</h3>
+                  <div class="control-actions">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      onclick="resetRobotOutput()"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                  <div class="control-trigger">
+                    <label for="trigger-button-name">Trigger Button</label>
+                    <input
+                      id="trigger-button-name"
+                      type="text"
+                      value="A"
+                      placeholder="Nama tombol"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      onclick="triggerRobotButton()"
+                    >
+                      Simulasikan Tombol
+                    </button>
+                  </div>
+                </section>
               </div>
             </div>
           </div>

@@ -1,30 +1,28 @@
-/* ===============================
-   PROJECT STUDIO SECTION
-================================ */
 #project-studio {
-  padding: 10px;
+  padding: 0.25rem;
 }
 
 .project-submenu {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
 }
 
 .project-submenu-btn {
-  border: 1px solid #cbd5e1;
-  background: #fff;
-  color: #0f172a;
+  border: 1px solid #cbd7e6;
+  background: rgba(255, 255, 255, 0.9);
+  color: #173250;
   border-radius: 999px;
-  padding: 10px 16px;
-  font-weight: 600;
+  padding: 0.6rem 0.95rem;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .project-submenu-btn.active {
-  background: #0d6efd;
+  background: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
   color: #fff;
-  border-color: #0d6efd;
+  border-color: transparent;
 }
 
 .project-panels {
@@ -33,10 +31,8 @@
 
 .project-panel {
   display: none;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 18px;
-  padding: 16px;
+  padding: 1.2rem;
+  overflow: hidden;
 }
 
 .project-panel.active {
@@ -44,22 +40,32 @@
 }
 
 .project-panel-header {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .project-panel-header h2 {
-  margin-bottom: 8px;
+  margin-bottom: 0.45rem;
+  font-size: 1.25rem;
+}
+
+.project-panel-header p {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 0.92rem;
+  color: #60758c;
 }
 
 .project-badge {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 0.35rem 0.72rem;
   border-radius: 999px;
-  background: #e0efff;
-  color: #0d6efd;
-  font-size: 0.8rem;
+  background: #e7f0ff;
+  color: #1d4ed8;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
 }
 
 .project-board-shell {
@@ -68,43 +74,43 @@
 
 .design-studio-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 1rem;
   align-items: start;
 }
 
-.design-tools-panel {
+.design-tools-panel,
+.technology-editors {
   display: grid;
-  gap: 12px;
+  gap: 0.85rem;
 }
 
-.design-tool-card {
-  border: 1px solid #dbe1ea;
-  border-radius: 14px;
-  padding: 12px;
-  background: #f8fafc;
+.design-tool-card,
+.technology-editor-card,
+.technology-preview-card {
+  padding: 1rem;
 }
 
 .design-tool-card h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
+  font-size: 0.96rem;
+  margin-bottom: 0.8rem;
 }
 
-.design-tool-card label {
+.design-tool-card label,
+.technology-editor-card label {
   display: block;
-  font-size: 0.82rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #24415f;
+  margin-bottom: 0.35rem;
 }
 
 .design-tool-card input,
-.design-tool-card textarea {
+.design-tool-card textarea,
+.technology-editor {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  background: #fff;
+  padding: 0.72rem 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 .design-board-shell {
@@ -113,14 +119,16 @@
 
 .project-toolbar {
   margin-bottom: 0;
+  width: 100%;
 }
 
 .project-whiteboard-wrapper {
-  height: 520px;
+  height: 500px;
+  min-width: 0;
 }
 
 .design-whiteboard-wrapper {
-  height: 720px;
+  height: 680px;
 }
 
 .design-whiteboard-wrapper::before {
@@ -137,36 +145,18 @@
 
 .technology-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-  gap: 16px;
-}
-
-.technology-editors {
-  display: grid;
-  gap: 12px;
-}
-
-.technology-editor-card,
-.technology-preview-card {
-  border: 1px solid #dbe1ea;
-  border-radius: 14px;
-  padding: 12px;
-  background: #f8fafc;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+  gap: 1rem;
 }
 
 .technology-editor-card label {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 0.55rem;
 }
 
 .technology-editor {
-  width: 100%;
-  min-height: 170px;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 10px;
+  min-height: 158px;
   font-family: Consolas, "Courier New", monospace;
+  font-size: 0.85rem;
   resize: vertical;
   background: #ffffff;
 }
@@ -174,47 +164,37 @@
 .technology-preview-actions {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 10px;
+  margin-bottom: 0.85rem;
 }
 
 .code-preview-iframe {
   width: 100%;
-  min-height: 640px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  min-height: 600px;
+  border: 1px solid #cbd7e6;
+  border-radius: 16px;
   background-color: #ffffff;
 }
 
-/* ===============================
-   DARK MODE
-================================ */
 .dark-mode .project-submenu-btn {
-  background-color: #1e1e1e;
-  color: #fff;
-  border-color: #3f3f46;
+  background-color: #162335;
+  color: #f8fafc;
+  border-color: #334d6f;
 }
 
 .dark-mode .project-submenu-btn.active {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-}
-
-.dark-mode .project-panel {
-  background-color: #1e1e1e;
-  border-color: #333;
-  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  border-color: transparent;
 }
 
 .dark-mode .project-badge {
-  background: #1d4ed8;
-  color: #eff6ff;
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
 }
 
-.dark-mode .technology-editor-card,
-.dark-mode .technology-preview-card,
-.dark-mode .design-tool-card {
-  background: #18181b;
-  border-color: #3f3f46;
+.dark-mode .project-panel-header p,
+.dark-mode .design-tool-card label,
+.dark-mode .technology-editor-card label {
+  color: #bfd0e2;
 }
 
 .dark-mode .technology-editor,
@@ -222,18 +202,19 @@
 .dark-mode .design-tool-card textarea,
 .dark-mode .code-preview-iframe,
 .dark-mode .project-whiteboard-canvas {
-  background-color: #2a2a2a;
+  background-color: #0f1a28;
   color: #ffffff;
-  border-color: #444;
+  border-color: #365273;
 }
 
-/* ===============================
-   RESPONSIVE
-================================ */
 @media (max-width: 992px) {
   .design-studio-layout,
   .technology-layout {
     grid-template-columns: 1fr;
+  }
+
+  .design-tools-panel {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 }
 
@@ -246,12 +227,16 @@
     width: 100%;
   }
 
+  .project-panel {
+    padding: 1rem;
+  }
+
   .project-whiteboard-wrapper {
-    height: 420px;
+    height: 400px;
   }
 
   .design-whiteboard-wrapper {
-    height: 520px;
+    height: 500px;
   }
 
   .code-preview-iframe {

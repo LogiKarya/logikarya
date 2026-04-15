@@ -28,20 +28,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const navbarEl = await loadComponent("navbar", "components/navbar.html");
   const homeEl = await loadComponent("home-container", "components/home.html");
   const sidebarEl = await loadComponent("sidebar", "components/sidebar.html");
-
-  await loadComponent(
-    "whiteboard-toolbar",
-    "assets/canvas/components/tools.html",
-  );
   await loadComponent("footer", "components/footer.html");
-
   if (navbarEl) initNavbarEvents();
   if (homeEl && typeof initHome === "function") initHome();
   if (sidebarEl) initSidebarEvents();
-
-  if (typeof initTools === "function") {
-    initTools();
-  }
 
   initResponsiveSidebar();
   showSection("home");
@@ -75,6 +65,7 @@ function showSection(id) {
 
   syncSidebarActive(id);
   updateToolbarTitle(id);
+  refreshVisibleCanvases(id);
 
   if (window.innerWidth <= 768) {
     closeSidebar();
@@ -248,18 +239,19 @@ function toggleTheme() {
   document.body.classList.toggle("dark-mode");
 }
 
-// ===============================
-// DARK MODE STYLE
-// ===============================
-const style = document.createElement("style");
-style.innerHTML = `
-.dark-mode {
-  background-color: #121212;
-  color: #ffffff;
+function refreshVisibleCanvases(sectionId) {
+  if (typeof refreshCanvasBoard === "function") {
+    if (sectionId === "life-math") {
+      if (typeof initLifeMathWhiteboard === "function") {
+        initLifeMathWhiteboard();
+      }
+      refreshCanvasBoard("life-math-board");
+    }
+
+    if (sectionId === "project-studio") {
+      ["design", "science", "economy"].forEach((boardId) => {
+        refreshCanvasBoard(`project-${boardId}`);
+      });
+    }
+  }
 }
-.dark-mode .card {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-`;
-document.head.appendChild(style);

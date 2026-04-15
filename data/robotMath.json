@@ -2,266 +2,174 @@
   "title": "Robot Math",
   "categories": [
     {
+      "id": "gerakan-robot",
+      "nama": "Gerakan Robot",
+      "blocks": [
+        {
+          "type": "move",
+          "label": "move()",
+          "description": "Gerakkan robot sesuai langkah.",
+          "params": {
+            "langkah": {
+              "label": "Langkah",
+              "type": "expression",
+              "value": "10"
+            }
+          }
+        },
+        {
+          "type": "turn",
+          "label": "turn()",
+          "description": "Putar robot berdasarkan derajat.",
+          "params": {
+            "derajat": {
+              "label": "Derajat",
+              "type": "expression",
+              "value": "90"
+            }
+          }
+        },
+        {
+          "type": "goToXY",
+          "label": "goToXY()",
+          "description": "Gerakkan robot menuju koordinat x dan y.",
+          "params": {
+            "x": {
+              "label": "X",
+              "type": "expression",
+              "value": "200"
+            },
+            "y": {
+              "label": "Y",
+              "type": "expression",
+              "value": "180"
+            }
+          }
+        },
+        {
+          "type": "setPosition",
+          "label": "setPosition()",
+          "description": "Set posisi robot secara langsung.",
+          "params": {
+            "x": {
+              "label": "X",
+              "type": "expression",
+              "value": "80"
+            },
+            "y": {
+              "label": "Y",
+              "type": "expression",
+              "value": "190"
+            }
+          }
+        },
+        {
+          "type": "changeXBy",
+          "label": "changeXBy()",
+          "description": "Ubah posisi X robot.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "15"
+            }
+          }
+        },
+        {
+          "type": "changeYBy",
+          "label": "changeYBy()",
+          "description": "Ubah posisi Y robot.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "15"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "tampilan-output",
+      "nama": "Tampilan & Output",
+      "blocks": [
+        {
+          "type": "say",
+          "label": "say()",
+          "description": "Tampilkan kata pada sprite.",
+          "params": {
+            "teks": {
+              "label": "Teks",
+              "type": "text",
+              "value": "Halo Robot Math"
+            }
+          }
+        },
+        {
+          "type": "showNumber",
+          "label": "showNumber()",
+          "description": "Tampilkan angka ke output.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "42"
+            }
+          }
+        },
+        {
+          "type": "showResult",
+          "label": "showResult()",
+          "description": "Evaluasi ekspresi matematika dan tampilkan hasilnya.",
+          "params": {
+            "ekspresi": {
+              "label": "Ekspresi",
+              "type": "expression",
+              "value": "add(multiply(2,3),4)"
+            }
+          }
+        },
+        {
+          "type": "clearOutput",
+          "label": "clearOutput()",
+          "description": "Bersihkan output panel.",
+          "params": {}
+        }
+      ]
+    },
+    {
       "id": "kejadian",
       "nama": "Kejadian",
       "blocks": [
         {
-          "type": "start",
-          "label": "Ketika Mulai",
-          "description": "Titik awal program robot.",
-          "params": {}
+          "type": "whenStart",
+          "label": "whenStart()",
+          "description": "Jalankan blok saat program dimulai.",
+          "params": {},
+          "slots": [
+            {
+              "id": "body",
+              "label": "Blok Saat Mulai"
+            }
+          ]
         },
         {
-          "type": "when_clicked",
-          "label": "Saat Sprite Diklik",
-          "description": "Menandai kejadian saat sprite disentuh atau diklik.",
+          "type": "whenButtonPressed",
+          "label": "whenButtonPressed()",
+          "description": "Jalankan blok saat tombol tertentu dipicu.",
           "params": {
-            "target": {
-              "label": "Target",
-              "type": "select",
-              "value": "sprite",
-              "options": ["sprite", "stage"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "gerakan",
-      "nama": "Gerakan",
-      "blocks": [
-        {
-          "type": "move_forward",
-          "label": "Maju",
-          "description": "Gerakkan sprite ke depan sesuai langkah.",
-          "params": {
-            "steps": {
-              "label": "Langkah",
-              "type": "number",
-              "value": 20,
-              "min": 0
-            }
-          }
-        },
-        {
-          "type": "move_backward",
-          "label": "Mundur",
-          "description": "Gerakkan sprite ke belakang sesuai langkah.",
-          "params": {
-            "steps": {
-              "label": "Langkah",
-              "type": "number",
-              "value": 20,
-              "min": 0
-            }
-          }
-        },
-        {
-          "type": "turn_left",
-          "label": "Belok Kiri",
-          "description": "Putar sprite ke kiri.",
-          "params": {
-            "angle": {
-              "label": "Sudut",
-              "type": "number",
-              "value": 90,
-              "min": 0
-            }
-          }
-        },
-        {
-          "type": "turn_right",
-          "label": "Belok Kanan",
-          "description": "Putar sprite ke kanan.",
-          "params": {
-            "angle": {
-              "label": "Sudut",
-              "type": "number",
-              "value": 90,
-              "min": 0
-            }
-          }
-        },
-        {
-          "type": "go_to",
-          "label": "Pergi Ke",
-          "description": "Pindahkan sprite ke koordinat tertentu di stage.",
-          "params": {
-            "x": {
-              "label": "X",
-              "type": "number",
-              "value": 150
-            },
-            "y": {
-              "label": "Y",
-              "type": "number",
-              "value": 180
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "operasi",
-      "nama": "Operasi",
-      "blocks": [
-        {
-          "type": "add",
-          "label": "Tambah",
-          "description": "Jumlahkan dua angka.",
-          "params": {
-            "a": {
-              "label": "Angka A",
-              "type": "number",
-              "value": 1
-            },
-            "b": {
-              "label": "Angka B",
-              "type": "number",
-              "value": 1
-            }
-          }
-        },
-        {
-          "type": "subtract",
-          "label": "Kurang",
-          "description": "Kurangi angka pertama dengan angka kedua.",
-          "params": {
-            "a": {
-              "label": "Angka A",
-              "type": "number",
-              "value": 8
-            },
-            "b": {
-              "label": "Angka B",
-              "type": "number",
-              "value": 3
-            }
-          }
-        },
-        {
-          "type": "multiply",
-          "label": "Kali",
-          "description": "Kalikan dua angka.",
-          "params": {
-            "a": {
-              "label": "Angka A",
-              "type": "number",
-              "value": 3
-            },
-            "b": {
-              "label": "Angka B",
-              "type": "number",
-              "value": 4
-            }
-          }
-        },
-        {
-          "type": "divide",
-          "label": "Bagi",
-          "description": "Bagi angka pertama dengan angka kedua.",
-          "params": {
-            "a": {
-              "label": "Angka A",
-              "type": "number",
-              "value": 12
-            },
-            "b": {
-              "label": "Angka B",
-              "type": "number",
-              "value": 2
-            }
-          }
-        },
-        {
-          "type": "modulo",
-          "label": "Modulo",
-          "description": "Hitung sisa hasil bagi.",
-          "params": {
-            "a": {
-              "label": "Angka A",
-              "type": "number",
-              "value": 10
-            },
-            "b": {
-              "label": "Angka B",
-              "type": "number",
-              "value": 3
-            }
-          }
-        },
-        {
-          "type": "triangle_area",
-          "label": "Luas Segitiga",
-          "description": "Hitung luas segitiga dari alas dan tinggi.",
-          "params": {
-            "base": {
-              "label": "Alas",
-              "type": "number",
-              "value": 10,
-              "min": 0
-            },
-            "height": {
-              "label": "Tinggi",
-              "type": "number",
-              "value": 6,
-              "min": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "tampilan",
-      "nama": "Tampilan",
-      "blocks": [
-        {
-          "type": "show_text",
-          "label": "Tampilkan Kata Stage",
-          "description": "Ubah kata yang tampil di bagian atas stage.",
-          "params": {
-            "text": {
-              "label": "Kata",
+            "nama": {
+              "label": "Nama Tombol",
               "type": "text",
-              "value": "Halo dari block"
+              "value": "A"
             }
-          }
-        },
-        {
-          "type": "set_stage_color",
-          "label": "Ubah Warna Sprite",
-          "description": "Atur warna sprite dan judul stage.",
-          "params": {
-            "color": {
-              "label": "Warna",
-              "type": "color",
-              "value": "#0d6efd"
+          },
+          "slots": [
+            {
+              "id": "body",
+              "label": "Blok Tombol"
             }
-          }
-        },
-        {
-          "type": "sprite_say",
-          "label": "Sprite Berkata",
-          "description": "Tampilkan kata dalam bubble sprite.",
-          "params": {
-            "text": {
-              "label": "Kata Sprite",
-              "type": "text",
-              "value": "Aku siap belajar"
-            }
-          }
-        },
-        {
-          "type": "say_message",
-          "label": "Pesan Output",
-          "description": "Tampilkan pesan di panel output.",
-          "params": {
-            "message": {
-              "label": "Pesan",
-              "type": "text",
-              "value": "Robot siap belajar"
-            }
-          }
+          ]
         }
       ]
     },
@@ -270,73 +178,378 @@
       "nama": "Kontrol",
       "blocks": [
         {
-          "type": "wait_seconds",
-          "label": "Tunggu",
-          "description": "Jeda sebelum lanjut ke block berikutnya.",
+          "type": "wait",
+          "label": "wait()",
+          "description": "Jeda selama beberapa detik.",
           "params": {
-            "seconds": {
+            "detik": {
               "label": "Detik",
-              "type": "number",
-              "value": 1,
-              "min": 0
+              "type": "expression",
+              "value": "1"
             }
           }
         },
         {
-          "type": "repeat_note",
-          "label": "Ulangi",
-          "description": "Penanda jumlah pengulangan program.",
+          "type": "repeat",
+          "label": "repeat()",
+          "description": "Ulangi blok di dalamnya sesuai jumlah.",
           "params": {
-            "times": {
-              "label": "Kali",
-              "type": "number",
-              "value": 2,
-              "min": 1
+            "jumlah": {
+              "label": "Jumlah",
+              "type": "expression",
+              "value": "3"
+            }
+          },
+          "slots": [
+            {
+              "id": "body",
+              "label": "Blok Repeat"
+            }
+          ]
+        },
+        {
+          "type": "forever",
+          "label": "forever()",
+          "description": "Jalankan blok berulang beberapa siklus simulasi.",
+          "params": {},
+          "slots": [
+            {
+              "id": "body",
+              "label": "Blok Forever"
+            }
+          ]
+        },
+        {
+          "type": "if",
+          "label": "if()",
+          "description": "Jalankan blok jika kondisi benar.",
+          "params": {
+            "kondisi": {
+              "label": "Kondisi",
+              "type": "expression",
+              "value": "greaterThan(5,3)"
+            }
+          },
+          "slots": [
+            {
+              "id": "body",
+              "label": "Blok If"
+            }
+          ]
+        },
+        {
+          "type": "ifElse",
+          "label": "ifElse()",
+          "description": "Pilih blok if atau else berdasarkan kondisi.",
+          "params": {
+            "kondisi": {
+              "label": "Kondisi",
+              "type": "expression",
+              "value": "equal(1,1)"
+            }
+          },
+          "slots": [
+            {
+              "id": "ifBody",
+              "label": "Blok If"
+            },
+            {
+              "id": "elseBody",
+              "label": "Blok Else"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "operator-matematika",
+      "nama": "Operator Matematika",
+      "blocks": [
+        {
+          "type": "add",
+          "label": "add()",
+          "description": "Jumlahkan dua nilai.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "1"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "1"
+            }
+          }
+        },
+        {
+          "type": "subtract",
+          "label": "subtract()",
+          "description": "Kurangi dua nilai.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "8"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "3"
+            }
+          }
+        },
+        {
+          "type": "multiply",
+          "label": "multiply()",
+          "description": "Kalikan dua nilai.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "2"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "3"
+            }
+          }
+        },
+        {
+          "type": "divide",
+          "label": "divide()",
+          "description": "Bagi dua nilai.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "10"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "2"
+            }
+          }
+        },
+        {
+          "type": "power",
+          "label": "power()",
+          "description": "Pangkatkan nilai A dengan B.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "2"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "4"
+            }
+          }
+        },
+        {
+          "type": "mod",
+          "label": "mod()",
+          "description": "Hitung sisa bagi.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "10"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "3"
             }
           }
         }
       ]
     },
     {
-      "id": "sensor",
-      "nama": "Sensor",
+      "id": "matematika-lanjutan",
+      "nama": "Matematika Lanjutan",
       "blocks": [
         {
-          "type": "detect_distance",
-          "label": "Baca Jarak",
-          "description": "Simulasi pembacaan sensor jarak.",
+          "type": "sqrt",
+          "label": "sqrt()",
+          "description": "Akar kuadrat nilai.",
           "params": {
-            "distance": {
-              "label": "Jarak (cm)",
-              "type": "number",
-              "value": 25,
-              "min": 0
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "16"
             }
           }
         },
         {
-          "type": "detect_touch",
-          "label": "Baca Sentuh",
-          "description": "Simulasi sensor sentuh aktif atau tidak.",
+          "type": "abs",
+          "label": "abs()",
+          "description": "Nilai absolut.",
           "params": {
-            "pressed": {
-              "label": "Status",
-              "type": "select",
-              "value": "tidak",
-              "options": ["tidak", "ya"]
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "-9"
             }
           }
         },
         {
-          "type": "detect_color",
-          "label": "Baca Warna",
-          "description": "Simulasi sensor pembaca warna.",
+          "type": "round",
+          "label": "round()",
+          "description": "Bulatkan nilai terdekat.",
           "params": {
-            "color": {
-              "label": "Warna Terbaca",
-              "type": "select",
-              "value": "biru",
-              "options": ["biru", "merah", "kuning", "hijau"]
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "4.6"
+            }
+          }
+        },
+        {
+          "type": "floor",
+          "label": "floor()",
+          "description": "Bulatkan ke bawah.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "4.6"
+            }
+          }
+        },
+        {
+          "type": "ceil",
+          "label": "ceil()",
+          "description": "Bulatkan ke atas.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "4.2"
+            }
+          }
+        },
+        {
+          "type": "random",
+          "label": "random()",
+          "description": "Ambil angka acak dari min ke max.",
+          "params": {
+            "min": {
+              "label": "Min",
+              "type": "expression",
+              "value": "1"
+            },
+            "max": {
+              "label": "Max",
+              "type": "expression",
+              "value": "10"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "logika-perbandingan",
+      "nama": "Logika & Perbandingan",
+      "blocks": [
+        {
+          "type": "greaterThan",
+          "label": "greaterThan()",
+          "description": "Periksa apakah A lebih besar dari B.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "5"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "3"
+            }
+          }
+        },
+        {
+          "type": "lessThan",
+          "label": "lessThan()",
+          "description": "Periksa apakah A lebih kecil dari B.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "2"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "7"
+            }
+          }
+        },
+        {
+          "type": "equal",
+          "label": "equal()",
+          "description": "Periksa kesamaan dua nilai.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "4"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "4"
+            }
+          }
+        },
+        {
+          "type": "and",
+          "label": "and()",
+          "description": "Logika dan.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "true"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "false"
+            }
+          }
+        },
+        {
+          "type": "or",
+          "label": "or()",
+          "description": "Logika atau.",
+          "params": {
+            "a": {
+              "label": "A",
+              "type": "expression",
+              "value": "true"
+            },
+            "b": {
+              "label": "B",
+              "type": "expression",
+              "value": "false"
+            }
+          }
+        },
+        {
+          "type": "not",
+          "label": "not()",
+          "description": "Negasi boolean.",
+          "params": {
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "false"
             }
           }
         }
@@ -347,59 +560,101 @@
       "nama": "Variabel",
       "blocks": [
         {
-          "type": "set_variable",
-          "label": "Set Variabel",
-          "description": "Buat atau isi nilai awal variabel.",
+          "type": "createVariable",
+          "label": "createVariable()",
+          "description": "Buat variabel baru.",
           "params": {
-            "name": {
+            "nama": {
               "label": "Nama",
               "type": "text",
-              "value": "x"
-            },
-            "value": {
-              "label": "Nilai",
-              "type": "number",
-              "value": 0
+              "value": "skor"
             }
           }
         },
         {
-          "type": "change_variable",
-          "label": "Ubah Variabel",
-          "description": "Tambahkan atau kurangi nilai variabel.",
+          "type": "setVariable",
+          "label": "setVariable()",
+          "description": "Set nilai variabel.",
           "params": {
-            "name": {
+            "nama": {
               "label": "Nama",
               "type": "text",
-              "value": "x"
+              "value": "skor"
             },
-            "delta": {
-              "label": "Perubahan",
-              "type": "number",
-              "value": 1
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "10"
+            }
+          }
+        },
+        {
+          "type": "changeVariable",
+          "label": "changeVariable()",
+          "description": "Tambahkan nilai ke variabel.",
+          "params": {
+            "nama": {
+              "label": "Nama",
+              "type": "text",
+              "value": "skor"
+            },
+            "nilai": {
+              "label": "Nilai",
+              "type": "expression",
+              "value": "5"
+            }
+          }
+        },
+        {
+          "type": "getVariable",
+          "label": "getVariable()",
+          "description": "Ambil nilai variabel dan tampilkan hasilnya.",
+          "params": {
+            "nama": {
+              "label": "Nama",
+              "type": "text",
+              "value": "skor"
             }
           }
         }
       ]
     },
     {
-      "id": "balok-saya",
-      "nama": "Balok Saya",
+      "id": "fungsi",
+      "nama": "Fungsi / Balok Saya",
       "blocks": [
         {
-          "type": "custom_block",
-          "label": "Aksi Kustom",
-          "description": "Tulis aksi buatanmu sendiri sebagai catatan program.",
+          "type": "createFunction",
+          "label": "createFunction()",
+          "description": "Buat fungsi custom dengan parameter.",
           "params": {
-            "name": {
-              "label": "Nama Balok",
+            "nama": {
+              "label": "Nama Fungsi",
               "type": "text",
-              "value": "Balok Hebat"
+              "value": "hitungSkor"
             },
-            "action": {
-              "label": "Aksi",
+            "parameter": {
+              "label": "Parameter",
               "type": "text",
-              "value": "Gerak lalu berhitung"
+              "value": "a,b"
+            }
+          },
+          "slots": [
+            {
+              "id": "body",
+              "label": "Isi Fungsi"
+            }
+          ]
+        },
+        {
+          "type": "return",
+          "label": "return()",
+          "description": "Kembalikan nilai dari fungsi.",
+          "params": {
+            "nilai": {
+              "label": "Nilai Return",
+              "type": "expression",
+              "value": "add(a,b)"
             }
           }
         }
