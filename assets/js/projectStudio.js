@@ -88,10 +88,12 @@ function initConnectedBoardTools() {
         .filter((item) => Number.isFinite(item) && item >= 0);
 
       if (!values.length) return;
+      const board = getCanvasBoard(`project-${boardId}`);
       addChartToCanvasBoard(
         `project-${boardId}`,
         titleInput?.value || "Grafik",
         values,
+        board?.defaults?.chartKind || "bar",
       );
     });
 

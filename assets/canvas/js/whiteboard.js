@@ -28,12 +28,65 @@ function clampCanvasValue(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+function getBoardToolMeta(tool) {
+  const toolMap = {
+    select: {
+      label: "Select",
+      hint: "Pilih objek untuk pindah, resize, edit, atau hapus.",
+    },
+    text: {
+      label: "Text",
+      hint: "Tambahkan teks polos tanpa frame atau box.",
+    },
+    "text-frame": {
+      label: "Text Box",
+      hint: "Tambahkan kotak teks yang bisa di-resize lalu edit saat dipilih.",
+    },
+    pen: {
+      label: "Draw",
+      hint: "Gambar bebas di canvas dengan warna dan ketebalan aktif.",
+    },
+    line: {
+      label: "Line",
+      hint: "Klik lalu tarik untuk membuat garis lurus.",
+    },
+    rect: {
+      label: "Rectangle",
+      hint: "Klik canvas untuk menambah persegi panjang.",
+    },
+    circle: {
+      label: "Circle",
+      hint: "Klik canvas untuk menambah lingkaran.",
+    },
+    triangle: {
+      label: "Triangle",
+      hint: "Klik canvas untuk menambah segitiga.",
+    },
+    polygon: {
+      label: "Polygon",
+      hint: "Klik canvas untuk menambah polygon.",
+    },
+  };
+
+  return toolMap[tool] || toolMap.select;
+}
+
+function isShapeTool(tool) {
+  return ["rect", "circle", "triangle", "polygon"].includes(tool);
+}
+
+function canObjectEditInline(object) {
+  return Boolean(
+    object && (isTextualObject(object) || isShapeTool(object.type)),
+  );
+}
+
 function createCanvasToolbarMarkup(boardId) {
   return `
     <div class="whiteboard-toolbar-inner">
       <div class="whiteboard-toolbar-group" role="group" aria-label="Tools">
         <button class="btn btn-outline-dark active" data-board-tool="${boardId}" data-tool="select" type="button">Select</button>
-        <button class="btn btn-outline-dark" data-board-tool="${boardId}" data-tool="text" type="button">Text</button>
+        <button class="btn btn-outline-dark" data-board-tool="${boardId}" data-tool="text" type="button">Masukkan Teks</button>
         <button class="btn btn-outline-dark" data-board-tool="${boardId}" data-tool="text-frame" type="button">Text Box</button>
         <button class="btn btn-outline-dark" data-board-tool="${boardId}" data-tool="pen" type="button">Draw</button>
         <button class="btn btn-outline-dark" data-board-tool="${boardId}" data-tool="line" type="button">Line</button>
@@ -69,6 +122,11 @@ function createCanvasToolbarMarkup(boardId) {
       </div>
 
       <div class="whiteboard-toolbar-group whiteboard-toolbar-control">
+        <label for="${boardId}-font-size">Font</label>
+        <input type="range" id="${boardId}-font-size" data-board-style="${boardId}" data-style-key="fontSize" min="12" max="72" value="24" />
+      </div>
+
+      <div class="whiteboard-toolbar-group whiteboard-toolbar-control">
         <label for="${boardId}-shape-kind">Shape</label>
         <select id="${boardId}-shape-kind" data-board-style="${boardId}" data-style-key="shapeKind">
           <option value="rect">Rect</option>
@@ -87,11 +145,14 @@ function createCanvasToolbarMarkup(boardId) {
       </div>
 
       <div class="whiteboard-toolbar-group whiteboard-toolbar-group-end" role="group" aria-label="Actions">
+        <button class="btn btn-outline-info" data-board-action="${boardId}" data-action="edit-content" type="button">Edit</button>
         <button class="btn btn-outline-danger" data-board-action="${boardId}" data-action="delete" type="button">Delete</button>
         <button class="btn btn-outline-warning" data-board-action="${boardId}" data-action="undo" type="button">Undo</button>
         <button class="btn btn-outline-warning" data-board-action="${boardId}" data-action="redo" type="button">Redo</button>
         <button class="btn btn-outline-danger" data-board-action="${boardId}" data-action="clear" type="button">Clear</button>
       </div>
+
+      <div class="whiteboard-toolbar-status" data-board-status="${boardId}"></div>
 
       <input type="file" hidden accept="image/*" data-board-upload="${boardId}" />
     </div>
@@ -112,6 +173,34 @@ function ensureBoardScene(board) {
   board.scene = scene;
 }
 
+function ensureBoardDialog(board) {
+  let dialog = board.wrapper.querySelector(".whiteboard-dialog-backdrop");
+  if (!dialog) {
+    dialog = document.createElement("div");
+    dialog.className = "whiteboard-dialog-backdrop";
+    dialog.innerHTML = `
+      <div class="whiteboard-dialog-card" role="dialog" aria-modal="true" aria-labelledby="${board.id}-dialog-title">
+        <div class="whiteboard-dialog-header">
+          <div>
+            <p class="whiteboard-dialog-kicker">Canvas Editor</p>
+            <h3 id="${board.id}-dialog-title" class="whiteboard-dialog-title">Edit Object</h3>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-dialog-action="cancel">Tutup</button>
+        </div>
+        <form class="whiteboard-dialog-form">
+          <div class="whiteboard-dialog-fields"></div>
+          <div class="whiteboard-dialog-actions">
+            <button type="button" class="btn btn-outline-secondary" data-dialog-action="cancel">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    `;
+    board.wrapper.appendChild(dialog);
+  }
+  board.dialog = dialog;
+}
+
 function getDefaultBoardStyle(fill = "#2563eb") {
   const normalizedFill = normalizeColor(fill);
   return {
@@ -119,6 +208,7 @@ function getDefaultBoardStyle(fill = "#2563eb") {
     stroke: "#1d4ed8",
     strokeWidth: 3,
     textColor: "#16324f",
+    fontSize: 24,
     shapeKind: "rect",
     chartKind: "bar",
   };
@@ -139,10 +229,12 @@ function createCanvasBoard({
     existing.wrapper = wrapper;
     existing.toolbar = toolbar;
     ensureBoardScene(existing);
+    ensureBoardDialog(existing);
     if (!toolbar.innerHTML.trim()) {
       toolbar.innerHTML = createCanvasToolbarMarkup(id);
       bindBoardToolbar(existing);
     }
+    bindBoardDialog(existing);
     refreshCanvasBoard(id);
     syncBoardDom(existing);
     updateBoardToolbarState(existing);
@@ -163,21 +255,28 @@ function createCanvasBoard({
     redoStack: [],
     selectedObjectId: null,
     interaction: null,
+    pointerSession: null,
+    tapState: null,
+    dialog: null,
+    pendingDialog: null,
     lastWidth: 0,
     lastHeight: 0,
     keyboardBound: false,
     resizeObserver: null,
     toolbarBound: false,
     sceneBound: false,
+    dialogBound: false,
   };
 
   toolbar.innerHTML = createCanvasToolbarMarkup(id);
   ensureBoardScene(board);
+  ensureBoardDialog(board);
   canvasBoards[id] = board;
 
   bindBoardToolbar(board);
   bindBoardSceneEvents(board);
   bindBoardKeyboard(board);
+  bindBoardDialog(board);
   observeBoardResize(board);
   refreshCanvasBoard(id);
   updateBoardToolbarState(board);
@@ -213,6 +312,11 @@ function bindBoardToolbar(board) {
     const action = actionButton.dataset.action;
     if (action === "delete") {
       deleteSelectedBoardObject(board.id);
+      return;
+    }
+
+    if (action === "edit-content") {
+      openSelectedObjectEditor(board);
       return;
     }
 
@@ -262,13 +366,46 @@ function bindBoardToolbar(board) {
     });
 }
 
+function bindBoardDialog(board) {
+  if (board.dialogBound || !board.dialog) return;
+  board.dialogBound = true;
+
+  board.dialog.addEventListener("click", (event) => {
+    if (
+      event.target === board.dialog ||
+      event.target.closest('[data-dialog-action="cancel"]')
+    ) {
+      closeBoardDialog(board);
+    }
+  });
+
+  board.dialog
+    .querySelector(".whiteboard-dialog-form")
+    ?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitBoardDialog(board);
+    });
+}
+
 function bindBoardSceneEvents(board) {
   if (board.sceneBound) return;
   board.sceneBound = true;
 
-  board.scene.addEventListener("mousedown", (event) => {
+  board.scene.addEventListener("pointerdown", (event) => {
+    if (!isPrimaryBoardPointerEvent(event)) return;
+
     const objectNode = event.target.closest(".whiteboard-object");
     const resizeHandle = event.target.closest(".whiteboard-resize-handle");
+    const pointer = getBoardPointer(board, event);
+    board.pointerSession = {
+      pointerId: event.pointerId,
+      pointerType: event.pointerType || "mouse",
+      objectId: objectNode?.dataset.objectId || null,
+      startX: pointer.x,
+      startY: pointer.y,
+      moved: false,
+      openedEditor: false,
+    };
 
     activeCanvasBoardId = board.id;
 
@@ -283,6 +420,10 @@ function bindBoardSceneEvents(board) {
 
     setBoardSelection(board, objectId);
 
+    if (canObjectEditInline(targetObject) && event.detail > 1) {
+      return;
+    }
+
     if (resizeHandle && isObjectResizable(targetObject)) {
       event.preventDefault();
       saveCanvasBoardState(board.id);
@@ -290,7 +431,8 @@ function bindBoardSceneEvents(board) {
         type: "resize",
         objectId,
         handle: resizeHandle.dataset.handle || "se",
-        startPointer: getBoardPointer(board, event),
+        pointerId: event.pointerId,
+        startPointer: pointer,
         startX: targetObject.x,
         startY: targetObject.y,
         startWidth: targetObject.width,
@@ -310,9 +452,9 @@ function bindBoardSceneEvents(board) {
 
     event.preventDefault();
     saveCanvasBoardState(board.id);
-    const pointer = getBoardPointer(board, event);
     board.interaction = {
       type: "move",
+      pointerId: event.pointerId,
       objectId,
       offsetX: pointer.x - targetObject.x,
       offsetY: pointer.y - targetObject.y,
@@ -320,6 +462,8 @@ function bindBoardSceneEvents(board) {
   });
 
   board.scene.addEventListener("dblclick", (event) => {
+    if (event.button !== 0) return;
+
     const objectNode = event.target.closest(".whiteboard-object");
     if (!objectNode) return;
 
@@ -329,20 +473,33 @@ function bindBoardSceneEvents(board) {
 
     setBoardSelection(board, objectId);
     activeCanvasBoardId = board.id;
+    event.preventDefault();
+    event.stopPropagation();
+    openBoardObjectEditor(board, objectId, "all");
+  });
 
-    if (isTextualObject(targetObject)) {
-      setObjectEditing(board, objectId, true);
-      return;
-    }
+  board.scene.addEventListener("contextmenu", (event) => {
+    const objectNode = event.target.closest(".whiteboard-object");
+    if (!objectNode) return;
 
-    if (targetObject.type === "chart") {
-      editChartObject(board, objectId);
-      return;
-    }
+    const objectId = objectNode.dataset.objectId;
+    const targetObject = board.objects.find((item) => item.id === objectId);
+    if (!targetObject) return;
 
-    if (targetObject.type === "table") {
-      editTableStructure(board, objectId);
-    }
+    setBoardSelection(board, objectId);
+    activeCanvasBoardId = board.id;
+    event.preventDefault();
+    event.stopPropagation();
+    openBoardObjectEditor(board, objectId, "end");
+  });
+
+  board.scene.addEventListener("pointerup", (event) => {
+    handleBoardPointerRelease(board, event);
+  });
+
+  board.scene.addEventListener("pointercancel", () => {
+    board.pointerSession = null;
+    stopBoardInteraction(board);
   });
 
   board.scene.addEventListener("input", (event) => {
@@ -353,11 +510,7 @@ function bindBoardSceneEvents(board) {
       );
       if (!target) return;
       target.text = editable.textContent || "";
-      if (target.type === "text") {
-        target.width = Math.max(120, Math.min(420, editable.scrollWidth + 20));
-        target.height = Math.max(36, editable.scrollHeight + 10);
-        syncBoardDom(board);
-      }
+      autoSizeTextObject(target, editable);
       return;
     }
 
@@ -384,23 +537,86 @@ function bindBoardSceneEvents(board) {
         );
         if (!target) return;
         target.editing = false;
-        if (!target.text.trim()) {
+        if (isTextualObject(target) && !target.text.trim()) {
           target.text = target.type === "text-frame" ? "Text box" : "Teks";
         }
+        autoSizeTextObject(target, editable);
         syncBoardDom(board);
       }
     },
     true,
   );
 
-  window.addEventListener("mousemove", (event) => {
+  window.addEventListener("pointermove", (event) => {
     if (!board.interaction) return;
+    if (
+      board.interaction.pointerId !== undefined &&
+      event.pointerId !== board.interaction.pointerId
+    )
+      return;
+
+    if (board.pointerSession) {
+      const pointer = getBoardPointer(board, event);
+      const deltaX = pointer.x - board.pointerSession.startX;
+      const deltaY = pointer.y - board.pointerSession.startY;
+      if (Math.hypot(deltaX, deltaY) > 6) {
+        board.pointerSession.moved = true;
+      }
+    }
     updateBoardInteraction(board, event);
   });
 
-  window.addEventListener("mouseup", () => {
+  window.addEventListener("pointerup", (event) => {
+    if (
+      board.interaction?.pointerId !== undefined &&
+      event.pointerId !== board.interaction.pointerId
+    )
+      return;
     stopBoardInteraction(board);
   });
+}
+
+function isPrimaryBoardPointerEvent(event) {
+  if (event.pointerType === "touch") return event.isPrimary !== false;
+  return event.button === 0;
+}
+
+function handleBoardPointerRelease(board, event) {
+  if (!board.pointerSession) return;
+  if (
+    board.pointerSession.pointerId !== undefined &&
+    event.pointerId !== board.pointerSession.pointerId
+  )
+    return;
+
+  const session = board.pointerSession;
+  board.pointerSession = null;
+
+  if (
+    session.pointerType !== "touch" &&
+    session.pointerType !== "pen" &&
+    session.pointerType !== ""
+  )
+    return;
+  if (session.moved || !session.objectId || session.openedEditor) return;
+
+  const now = Date.now();
+  const lastTap = board.tapState;
+  const isDoubleTap =
+    lastTap &&
+    lastTap.objectId === session.objectId &&
+    now - lastTap.time < 360;
+
+  if (isDoubleTap) {
+    openBoardObjectEditor(board, session.objectId, "all");
+    board.tapState = null;
+    return;
+  }
+
+  board.tapState = {
+    objectId: session.objectId,
+    time: now,
+  };
 }
 
 function bindBoardKeyboard(board) {
@@ -424,39 +640,318 @@ function bindBoardKeyboard(board) {
 
     if (event.key === "Delete" || event.key === "Backspace") {
       deleteSelectedBoardObject(board.id);
+      return;
+    }
+
+    const target = board.objects.find(
+      (item) => item.id === board.selectedObjectId,
+    );
+    if (!target) return;
+
+    const movement = event.shiftKey ? 10 : 1;
+    if (event.key === "ArrowLeft") {
+      target.x = clampCanvasValue(target.x - movement, 0, board.lastWidth - 20);
+      syncBoardDom(board);
+      return;
+    }
+    if (event.key === "ArrowRight") {
+      target.x = clampCanvasValue(target.x + movement, 0, board.lastWidth - 20);
+      syncBoardDom(board);
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      target.y = clampCanvasValue(
+        target.y - movement,
+        0,
+        board.lastHeight - 20,
+      );
+      syncBoardDom(board);
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      target.y = clampCanvasValue(
+        target.y + movement,
+        0,
+        board.lastHeight - 20,
+      );
+      syncBoardDom(board);
     }
   });
 }
 
 function handleBoardToolSelection(board, tool) {
   activeCanvasBoardId = board.id;
-  board.tool = tool;
-  updateBoardToolbarState(board);
 
-  if (tool !== "select") {
-    setBoardSelection(board, null, false);
+  if (tool === "text") {
+    board.tool = tool;
+    updateBoardToolbarState(board);
+    insertBoardTextFromToolbar(board, false, false);
+    return;
+  }
+
+  if (tool === "text-frame") {
+    board.tool = tool;
+    updateBoardToolbarState(board);
+    insertBoardTextFromToolbar(board, true, true);
+    return;
   }
 
   if (tool === "table") {
-    createTableObjectFromPrompt(board);
-    board.tool = "select";
+    openTableDialog(board);
     updateBoardToolbarState(board);
     return;
   }
 
   if (tool === "chart-bar" || tool === "chart-line") {
-    createChartObjectFromPrompt(board, tool === "chart-line" ? "line" : "bar");
-    board.tool = "select";
+    openChartDialog(board, null, tool === "chart-line" ? "line" : "bar");
     updateBoardToolbarState(board);
-  }
-}
-
-function handleBoardEmptySceneDown(board, event) {
-  if (board.tool === "text" || board.tool === "text-frame") {
-    createTextObjectAtPointer(board, event, board.tool === "text-frame");
     return;
   }
 
+  board.tool = tool;
+  if (isShapeTool(tool)) {
+    board.defaults.shapeKind = tool;
+  }
+  updateBoardToolbarState(board);
+}
+
+function getDialogFieldMarkup(field) {
+  const id = `dialog-field-${field.name}`;
+  const value = escapeHtml(field.value ?? "");
+  const common = `id="${id}" name="${field.name}"`;
+  if (field.type === "textarea") {
+    return `
+      <label class="whiteboard-dialog-field" for="${id}">
+        <span>${escapeHtml(field.label || field.name)}</span>
+        <textarea ${common} rows="${field.rows || 4}" placeholder="${escapeHtml(field.placeholder || "")}">${value}</textarea>
+      </label>
+    `;
+  }
+
+  if (field.type === "select") {
+    const options = (field.options || [])
+      .map(
+        (option) =>
+          `<option value="${escapeHtml(option.value)}"${String(option.value) === String(field.value) ? " selected" : ""}>${escapeHtml(option.label)}</option>`,
+      )
+      .join("");
+    return `
+      <label class="whiteboard-dialog-field" for="${id}">
+        <span>${escapeHtml(field.label || field.name)}</span>
+        <select ${common}>${options}</select>
+      </label>
+    `;
+  }
+
+  return `
+    <label class="whiteboard-dialog-field" for="${id}">
+      <span>${escapeHtml(field.label || field.name)}</span>
+      <input
+        ${common}
+        type="${escapeHtml(field.type || "text")}"
+        value="${value}"
+        placeholder="${escapeHtml(field.placeholder || "")}"
+        ${field.min !== undefined ? `min="${field.min}"` : ""}
+        ${field.max !== undefined ? `max="${field.max}"` : ""}
+        ${field.step !== undefined ? `step="${field.step}"` : ""}
+      />
+    </label>
+  `;
+}
+
+function openBoardDialog(board, config) {
+  ensureBoardDialog(board);
+  if (!board.dialog || !config) return;
+
+  const title = board.dialog.querySelector(".whiteboard-dialog-title");
+  const fields = board.dialog.querySelector(".whiteboard-dialog-fields");
+  const submitButton = board.dialog.querySelector('button[type="submit"]');
+  if (title) title.textContent = config.title || "Edit";
+  if (fields) {
+    fields.innerHTML = (config.fields || []).map(getDialogFieldMarkup).join("");
+  }
+  if (submitButton) {
+    submitButton.textContent = config.submitLabel || "Simpan";
+  }
+
+  board.pendingDialog = config;
+  board.dialog.classList.add("open");
+  requestAnimationFrame(() => {
+    board.dialog.querySelector("input, textarea, select")?.focus();
+  });
+}
+
+function closeBoardDialog(board) {
+  if (!board.dialog) return;
+  board.dialog.classList.remove("open");
+  board.pendingDialog = null;
+}
+
+function submitBoardDialog(board) {
+  if (!board.pendingDialog || !board.dialog) return;
+
+  const form = board.dialog.querySelector(".whiteboard-dialog-form");
+  const formData = new FormData(form);
+  const values = Object.fromEntries(formData.entries());
+  board.pendingDialog.onSubmit?.(values);
+  closeBoardDialog(board);
+}
+
+function openChartDialog(board, objectId = null, chartKind = "bar") {
+  const target = objectId
+    ? board.objects.find(
+        (item) => item.id === objectId && item.type === "chart",
+      )
+    : null;
+  const activeKind = target?.style?.chartKind || chartKind;
+  openBoardDialog(board, {
+    mode: target ? "chart-edit" : "chart-create",
+    title: target ? "Edit Grafik" : "Buat Grafik",
+    submitLabel: target ? "Perbarui Grafik" : "Tambahkan Grafik",
+    fields: [
+      {
+        name: "title",
+        label: "Judul grafik",
+        type: "text",
+        value:
+          target?.title ||
+          (activeKind === "line" ? "Grafik Tren" : "Grafik Data"),
+      },
+      {
+        name: "chartKind",
+        label: "Jenis grafik",
+        type: "select",
+        value: activeKind,
+        options: [
+          { value: "bar", label: "Bar chart" },
+          { value: "line", label: "Line chart" },
+        ],
+      },
+      {
+        name: "labels",
+        label: "Label data (pisahkan koma)",
+        type: "textarea",
+        rows: 2,
+        value: (target?.labels || ["A", "B", "C", "D"]).join(", "),
+      },
+      {
+        name: "values",
+        label: "Nilai data (pisahkan koma)",
+        type: "textarea",
+        rows: 3,
+        value: (target?.values || [12, 18, 10, 24]).join(", "),
+      },
+    ],
+    onSubmit(values) {
+      const parsedValues = String(values.values || "")
+        .split(",")
+        .map((item) => Number(item.trim()))
+        .filter((item) => Number.isFinite(item));
+      if (!parsedValues.length) return;
+
+      const labels = String(values.labels || "")
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      if (target) {
+        saveCanvasBoardState(board.id);
+        target.title = values.title || "Grafik";
+        target.values = parsedValues;
+        target.labels = labels.length ? labels : null;
+        target.style.chartKind = values.chartKind || "bar";
+        board.selectedObjectId = target.id;
+        syncBoardDom(board);
+        syncBoardStyleControls(board);
+        return;
+      }
+
+      addChartToCanvasBoard(
+        board.id,
+        values.title || "Grafik",
+        parsedValues,
+        values.chartKind || "bar",
+        labels.length ? labels : null,
+      );
+    },
+  });
+}
+
+function openTableDialog(board, objectId = null) {
+  const target = objectId
+    ? board.objects.find(
+        (item) => item.id === objectId && item.type === "table",
+      )
+    : null;
+  openBoardDialog(board, {
+    mode: target ? "table-edit" : "table-create",
+    title: target ? "Edit Tabel" : "Buat Tabel",
+    submitLabel: target ? "Perbarui Tabel" : "Tambahkan Tabel",
+    fields: [
+      {
+        name: "title",
+        label: "Judul tabel",
+        type: "text",
+        value: target?.title || "Table",
+      },
+      {
+        name: "rows",
+        label: "Jumlah baris",
+        type: "number",
+        min: 1,
+        max: 20,
+        value: target?.rows?.length || 3,
+      },
+      {
+        name: "cols",
+        label: "Jumlah kolom",
+        type: "number",
+        min: 1,
+        max: 12,
+        value: target?.rows?.[0]?.length || 3,
+      },
+    ],
+    onSubmit(values) {
+      const rowCount = clampCanvasValue(Number(values.rows) || 3, 1, 20);
+      const colCount = clampCanvasValue(Number(values.cols) || 3, 1, 12);
+
+      if (target) {
+        saveCanvasBoardState(board.id);
+        target.title = values.title || "Table";
+        target.rows = Array.from({ length: rowCount }, (_, rowIndex) =>
+          Array.from(
+            { length: colCount },
+            (_, colIndex) => target.rows?.[rowIndex]?.[colIndex] || "",
+          ),
+        );
+        target.height = Math.max(180, rowCount * 42 + 48);
+        board.selectedObjectId = target.id;
+        syncBoardDom(board);
+        syncBoardStyleControls(board);
+        return;
+      }
+
+      const rows = Array.from({ length: rowCount }, (_, rowIndex) =>
+        Array.from({ length: colCount }, (_, colIndex) =>
+          rowIndex === 0
+            ? `Kolom ${colIndex + 1}`
+            : `Isi ${rowIndex}.${colIndex + 1}`,
+        ),
+      );
+      addTableToCanvasBoard(board.id, values.title || "Table", rows);
+    },
+  });
+}
+
+function openSelectedObjectEditor(board) {
+  const target = board.objects.find(
+    (item) => item.id === board.selectedObjectId,
+  );
+  if (!target) return;
+  openBoardObjectEditor(board, target.id, "all");
+}
+
+function handleBoardEmptySceneDown(board, event) {
   if (["rect", "circle", "triangle", "polygon"].includes(board.tool)) {
     createShapeObjectAtPointer(board, event, board.tool);
     return;
@@ -490,11 +985,63 @@ function setCanvasBoardTool(boardId, tool) {
 }
 
 function updateBoardToolbarState(board) {
+  const selectedObject = board.objects.find(
+    (item) => item.id === board.selectedObjectId,
+  );
+  const activeTool = isShapeTool(board.tool)
+    ? board.tool
+    : board.tool === "select" &&
+        selectedObject &&
+        isShapeTool(selectedObject.type)
+      ? selectedObject.type
+      : board.tool;
+  const toolMeta = getBoardToolMeta(activeTool);
+  const statusNode = board.toolbar.querySelector(
+    `[data-board-status="${board.id}"]`,
+  );
+
   board.toolbar
     .querySelectorAll(`[data-board-tool="${board.id}"]`)
     .forEach((button) => {
-      button.classList.toggle("active", button.dataset.tool === board.tool);
+      const tool = button.dataset.tool || "";
+      button.classList.toggle("active", tool === activeTool);
+      if (tool === "table" || tool === "chart-bar" || tool === "chart-line") {
+        button.classList.remove("active");
+      }
     });
+
+  board.toolbar
+    .querySelectorAll(`[data-board-action="${board.id}"]`)
+    .forEach((button) => {
+      const action = button.dataset.action;
+      if (action === "edit-content") {
+        button.disabled = !Boolean(
+          selectedObject &&
+          (canObjectEditInline(selectedObject) ||
+            selectedObject.type === "table" ||
+            selectedObject.type === "chart"),
+        );
+      }
+      if (action === "delete") {
+        button.disabled = !board.selectedObjectId;
+      }
+      if (action === "undo") {
+        button.disabled = !board.history.length;
+      }
+      if (action === "redo") {
+        button.disabled = !board.redoStack.length;
+      }
+      if (action === "clear") {
+        button.disabled = !board.objects.length;
+      }
+    });
+
+  if (statusNode) {
+    statusNode.innerHTML = `
+      <strong>${escapeHtml(toolMeta.label)}</strong>
+      <span>${escapeHtml(toolMeta.hint)}</span>
+    `;
+  }
 }
 
 function saveCanvasBoardState(boardId) {
@@ -555,6 +1102,14 @@ function deleteSelectedBoardObject(boardId) {
 }
 
 function setBoardSelection(board, objectId, sync = true) {
+  board.objects.forEach((item) => {
+    if (item.id !== objectId && canObjectEditInline(item)) {
+      item.editing = false;
+    }
+    if (item.id !== objectId && item.type === "table") {
+      item.editing = false;
+    }
+  });
   board.selectedObjectId = objectId;
   activeCanvasBoardId = objectId ? board.id : activeCanvasBoardId;
   if (sync) {
@@ -563,9 +1118,71 @@ function setBoardSelection(board, objectId, sync = true) {
   syncBoardStyleControls(board);
 }
 
-function setObjectEditing(board, objectId, editing) {
+function startInlineObjectEditing(board, objectId, selectionMode = "end") {
   const target = board.objects.find((item) => item.id === objectId);
-  if (!target || !isTextualObject(target)) return;
+  if (!target || !canObjectEditInline(target)) return;
+
+  setBoardSelection(board, objectId, false);
+  setObjectEditing(board, objectId, true, selectionMode);
+}
+
+function openBoardObjectEditor(board, objectId, selectionMode = "end") {
+  const target = board.objects.find((item) => item.id === objectId);
+  if (!target) return;
+
+  if (canObjectEditInline(target)) {
+    startInlineObjectEditing(board, objectId, selectionMode);
+    return;
+  }
+
+  if (target.type === "table") {
+    openTableInlineEditing(board, objectId);
+    return;
+  }
+
+  if (target.type === "chart") {
+    editChartObject(board, objectId);
+  }
+}
+
+function openTableInlineEditing(board, objectId) {
+  const target = board.objects.find(
+    (item) => item.id === objectId && item.type === "table",
+  );
+  if (!target) return;
+
+  setBoardSelection(board, objectId, false);
+  target.editing = true;
+  syncBoardDom(board);
+  requestAnimationFrame(() => {
+    board.scene
+      .querySelector(
+        `.whiteboard-object[data-object-id="${objectId}"] .whiteboard-table-cell`,
+      )
+      ?.focus();
+  });
+}
+
+function autoSizeTextObject(target, editable) {
+  if (!target || !editable || !canObjectEditInline(target)) return;
+
+  const objectNode = editable.closest(".whiteboard-object");
+  if (!objectNode) return;
+
+  if (target.type === "text") {
+    target.width = Math.max(120, Math.min(420, editable.scrollWidth + 20));
+    target.height = Math.max(36, editable.scrollHeight + 10);
+  } else if (target.type === "text-frame") {
+    target.height = Math.max(72, editable.scrollHeight + 20);
+  }
+
+  objectNode.style.width = `${Math.max(target.width, 20)}px`;
+  objectNode.style.height = `${Math.max(target.height, 20)}px`;
+}
+
+function setObjectEditing(board, objectId, editing, selectionMode = "end") {
+  const target = board.objects.find((item) => item.id === objectId);
+  if (!target || !canObjectEditInline(target)) return;
 
   target.editing = editing;
   syncBoardDom(board);
@@ -580,8 +1197,12 @@ function setObjectEditing(board, objectId, editing) {
     const selection = window.getSelection();
     const range = document.createRange();
     range.selectNodeContents(editable);
-    range.collapse(false);
     selection.removeAllRanges();
+    if (selectionMode === "all") {
+      selection.addRange(range);
+      return;
+    }
+    range.collapse(false);
     selection.addRange(range);
   });
 }
@@ -606,6 +1227,7 @@ function getObjectStyle(object, board) {
       object.style?.textColor,
       board.defaults.textColor,
     ),
+    fontSize: Number(object.style?.fontSize ?? board.defaults.fontSize) || 24,
     shapeKind: object.style?.shapeKind || board.defaults.shapeKind,
     chartKind: object.style?.chartKind || board.defaults.chartKind,
   };
@@ -640,12 +1262,39 @@ function createTextObjectAtPointer(board, event, framed = false) {
   next.style.textColor = board.defaults.textColor;
 
   board.objects.push(next);
-  board.tool = "select";
   board.selectedObjectId = next.id;
-  updateBoardToolbarState(board);
   syncBoardDom(board);
   syncBoardStyleControls(board);
   setObjectEditing(board, next.id, true);
+}
+
+function insertBoardTextFromToolbar(board, framed = false, autoEdit = true) {
+  const width = framed ? 240 : 180;
+  const height = framed ? 130 : 44;
+  const x = Math.max(24, board.lastWidth / 2 - width / 2);
+  const y = Math.max(24, board.lastHeight / 2 - height / 2);
+
+  saveCanvasBoardState(board.id);
+  const next = createBaseObject(
+    framed ? "text-frame" : "text",
+    x,
+    y,
+    width,
+    height,
+    board,
+  );
+  next.text = "";
+  next.editing = Boolean(autoEdit);
+  next.style.fill = framed ? "#ffffff" : "transparent";
+  next.style.textColor = board.defaults.textColor;
+
+  board.objects.push(next);
+  board.selectedObjectId = next.id;
+  syncBoardDom(board);
+  syncBoardStyleControls(board);
+  if (autoEdit) {
+    setObjectEditing(board, next.id, true, "all");
+  }
 }
 
 function createShapeObjectAtPointer(board, event, shapeType) {
@@ -662,11 +1311,11 @@ function createShapeObjectAtPointer(board, event, shapeType) {
   next.style.fill = board.defaults.fill;
   next.style.stroke = board.defaults.stroke;
   next.style.shapeKind = shapeType;
+  next.text = "";
+  next.editing = false;
 
   board.objects.push(next);
-  board.tool = "select";
   board.selectedObjectId = next.id;
-  updateBoardToolbarState(board);
   syncBoardDom(board);
   syncBoardStyleControls(board);
 }
@@ -685,8 +1334,6 @@ function startLineObject(board, event) {
     objectId: next.id,
     startPointer: pointer,
   };
-  board.tool = "select";
-  updateBoardToolbarState(board);
   syncBoardDom(board);
 }
 
@@ -706,8 +1353,6 @@ function startFreehandObject(board, event) {
     objectId: next.id,
     rawPoints: [{ x: pointer.x, y: pointer.y }],
   };
-  board.tool = "select";
-  updateBoardToolbarState(board);
   syncBoardDom(board);
 }
 
@@ -838,6 +1483,8 @@ function applyBoardStyleControl(board, control) {
     board.defaults.stroke = normalizeColor(value, board.defaults.stroke);
   } else if (key === "strokeWidth") {
     board.defaults.strokeWidth = Number(value) || board.defaults.strokeWidth;
+  } else if (key === "fontSize") {
+    board.defaults.fontSize = Number(value) || board.defaults.fontSize;
   } else if (key === "shapeKind") {
     board.defaults.shapeKind = value || board.defaults.shapeKind;
   } else if (key === "chartKind") {
@@ -869,6 +1516,10 @@ function applyBoardStyleControl(board, control) {
     target.style.strokeWidth = Number(value) || target.style.strokeWidth || 1;
   }
 
+  if (key === "fontSize") {
+    target.style.fontSize = Number(value) || target.style.fontSize || 24;
+  }
+
   if (
     key === "shapeKind" &&
     ["rect", "circle", "triangle", "polygon"].includes(target.type)
@@ -881,10 +1532,16 @@ function applyBoardStyleControl(board, control) {
     target.style.chartKind = value;
   }
 
+  if (key === "shapeKind" && !target && isShapeTool(value)) {
+    board.tool = value;
+  }
+
   syncBoardDom(board);
 }
 
 function syncBoardStyleControls(board) {
+  updateBoardToolbarState(board);
+
   const target = board.objects.find(
     (item) => item.id === board.selectedObjectId,
   );
@@ -893,6 +1550,7 @@ function syncBoardStyleControls(board) {
   const fillInput = board.toolbar.querySelector(`#${board.id}-fill-color`);
   const strokeInput = board.toolbar.querySelector(`#${board.id}-stroke-color`);
   const widthInput = board.toolbar.querySelector(`#${board.id}-stroke-width`);
+  const fontInput = board.toolbar.querySelector(`#${board.id}-font-size`);
   const shapeSelect = board.toolbar.querySelector(`#${board.id}-shape-kind`);
   const chartSelect = board.toolbar.querySelector(`#${board.id}-chart-kind`);
 
@@ -902,6 +1560,8 @@ function syncBoardStyleControls(board) {
     strokeInput.value = normalizeColor(style.stroke, board.defaults.stroke);
   if (widthInput)
     widthInput.value = String(style.strokeWidth || board.defaults.strokeWidth);
+  if (fontInput)
+    fontInput.value = String(style.fontSize || board.defaults.fontSize);
   if (shapeSelect)
     shapeSelect.value = style.shapeKind || board.defaults.shapeKind;
   if (chartSelect)
@@ -1155,7 +1815,7 @@ function renderBoardObject(board, object) {
       object.type,
     )
   ) {
-    node.innerHTML = getShapeSvgMarkup(object, style);
+    renderDrawableObject(node, object, style);
   } else if (object.type === "image") {
     node.innerHTML = `<img src="${object.src}" alt="Canvas asset" class="whiteboard-object-image" />`;
     node.style.background = "#ffffff";
@@ -1171,6 +1831,20 @@ function renderBoardObject(board, object) {
   }
 
   ensureResizeHandles(node, object, board.selectedObjectId === object.id);
+}
+
+function renderDrawableObject(node, object, style) {
+  node.innerHTML = getShapeSvgMarkup(object, style);
+  if (!isShapeTool(object.type)) return;
+
+  const content = document.createElement("div");
+  content.className = "whiteboard-shape-content whiteboard-object-content";
+  content.contentEditable = String(Boolean(object.editing));
+  content.dataset.objectId = object.id;
+  content.textContent = object.text || (object.editing ? "" : "");
+  content.style.color = style.textColor;
+  content.style.fontSize = `${Math.max(14, style.fontSize * 0.78)}px`;
+  node.appendChild(content);
 }
 
 function renderTextObject(node, board, object, style) {
@@ -1192,10 +1866,12 @@ function renderTextObject(node, board, object, style) {
     object.text ||
     (object.editing ? "" : object.type === "text-frame" ? "Text box" : "Teks");
   content.style.color = style.textColor;
+  content.style.fontSize = `${style.fontSize}px`;
   node.appendChild(content);
 }
 
 function renderTableObject(node, object) {
+  const editable = Boolean(object.editing);
   const rows = (object.rows || [])
     .map(
       (row, rowIndex) =>
@@ -1204,7 +1880,7 @@ function renderTableObject(node, object) {
             const tag = rowIndex === 0 ? "th" : "td";
             return `<${tag}
               class="whiteboard-table-cell"
-              contenteditable="true"
+              contenteditable="${editable}"
               data-object-id="${object.id}"
               data-row="${rowIndex}"
               data-col="${colIndex}"
@@ -1348,130 +2024,34 @@ function addTableToCanvasBoard(boardId, title, rows) {
   );
   next.title = title || "Table";
   next.rows = rows;
+  next.editing = true;
   board.objects.push(next);
   board.selectedObjectId = next.id;
   syncBoardDom(board);
   syncBoardStyleControls(board);
+  requestAnimationFrame(() => {
+    board.scene
+      .querySelector(
+        `.whiteboard-object[data-object-id="${next.id}"] .whiteboard-table-cell`,
+      )
+      ?.focus();
+  });
 }
 
 function createTableObjectFromPrompt(board) {
-  const rowCount = Number(window.prompt("Jumlah baris tabel:", "3"));
-  const colCount = Number(window.prompt("Jumlah kolom tabel:", "3"));
-  if (
-    !Number.isInteger(rowCount) ||
-    !Number.isInteger(colCount) ||
-    rowCount < 1 ||
-    colCount < 1
-  )
-    return;
-
-  const rows = Array.from({ length: rowCount }, (_, rowIndex) =>
-    Array.from({ length: colCount }, (_, colIndex) =>
-      rowIndex === 0
-        ? `Kolom ${colIndex + 1}`
-        : `Isi ${rowIndex}.${colIndex + 1}`,
-    ),
-  );
-  addTableToCanvasBoard(board.id, "Table", rows);
+  openTableDialog(board);
 }
 
 function createChartObjectFromPrompt(board, chartKind) {
-  const title = window.prompt(
-    "Judul grafik:",
-    chartKind === "line" ? "Grafik Tren" : "Grafik Data",
-  );
-  const rawValues = window.prompt(
-    "Masukkan data angka, pisahkan dengan koma:",
-    "12,18,10,24",
-  );
-  if (!rawValues) return;
-
-  const values = rawValues
-    .split(",")
-    .map((item) => Number(item.trim()))
-    .filter((item) => Number.isFinite(item));
-  if (!values.length) return;
-
-  const rawLabels = window.prompt(
-    "Masukkan label data, pisahkan dengan koma:",
-    "A,B,C,D",
-  );
-  const labels = rawLabels
-    ? rawLabels
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    : null;
-
-  addChartToCanvasBoard(
-    board.id,
-    title || "Grafik",
-    values,
-    chartKind,
-    labels?.length ? labels : null,
-  );
+  openChartDialog(board, null, chartKind);
 }
 
 function editChartObject(board, objectId) {
-  const target = board.objects.find(
-    (item) => item.id === objectId && item.type === "chart",
-  );
-  if (!target) return;
-
-  const rawValues = window.prompt(
-    "Edit data angka, pisahkan dengan koma:",
-    (target.values || []).join(","),
-  );
-  if (!rawValues) return;
-
-  const values = rawValues
-    .split(",")
-    .map((item) => Number(item.trim()))
-    .filter((item) => Number.isFinite(item));
-  if (!values.length) return;
-
-  target.values = values;
-  const rawLabels = window.prompt(
-    "Edit label data, pisahkan dengan koma:",
-    (target.labels || []).join(","),
-  );
-  target.labels = rawLabels
-    ? rawLabels
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean)
-    : null;
-  syncBoardDom(board);
+  openChartDialog(board, objectId);
 }
 
 function editTableStructure(board, objectId) {
-  const target = board.objects.find(
-    (item) => item.id === objectId && item.type === "table",
-  );
-  if (!target) return;
-
-  const rowCount = Number(
-    window.prompt("Jumlah baris baru:", String(target.rows?.length || 3)),
-  );
-  const colCount = Number(
-    window.prompt("Jumlah kolom baru:", String(target.rows?.[0]?.length || 3)),
-  );
-  if (
-    !Number.isInteger(rowCount) ||
-    !Number.isInteger(colCount) ||
-    rowCount < 1 ||
-    colCount < 1
-  )
-    return;
-
-  target.rows = Array.from({ length: rowCount }, (_, rowIndex) =>
-    Array.from(
-      { length: colCount },
-      (_, colIndex) => target.rows?.[rowIndex]?.[colIndex] || "",
-    ),
-  );
-  target.height = Math.max(180, rowCount * 42 + 48);
-  syncBoardDom(board);
+  openTableDialog(board, objectId);
 }
 
 function initLifeMathWhiteboard() {
