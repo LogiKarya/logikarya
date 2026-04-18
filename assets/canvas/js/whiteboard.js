@@ -394,6 +394,16 @@ function bindBoardSceneEvents(board) {
   board.scene.addEventListener("pointerdown", (event) => {
     if (!isPrimaryBoardPointerEvent(event)) return;
 
+    if (
+      event.target.closest(
+        ".whiteboard-object-content[contenteditable='true']",
+      ) ||
+      event.target.closest(".whiteboard-table-cell[contenteditable='true']")
+    ) {
+      board.pointerSession = null;
+      return;
+    }
+
     const objectNode = event.target.closest(".whiteboard-object");
     const resizeHandle = event.target.closest(".whiteboard-resize-handle");
     const pointer = getBoardPointer(board, event);
@@ -450,12 +460,11 @@ function bindBoardSceneEvents(board) {
     if (event.target.closest(".whiteboard-table-cell[contenteditable='true']"))
       return;
 
-    event.preventDefault();
-    saveCanvasBoardState(board.id);
     board.interaction = {
-      type: "move",
+      type: "move-ready",
       pointerId: event.pointerId,
       objectId,
+      startPointer: pointer,
       offsetX: pointer.x - targetObject.x,
       offsetY: pointer.y - targetObject.y,
     };
@@ -475,6 +484,15 @@ function bindBoardSceneEvents(board) {
     activeCanvasBoardId = board.id;
     event.preventDefault();
     event.stopPropagation();
+
+    board.pointerSession = null;
+    stopBoardInteraction(board);
+
+    if (isTextualObject(targetObject)) {
+      startInlineObjectEditing(board, objectId, "all");
+      return;
+    }
+
     openBoardObjectEditor(board, objectId, "all");
   });
 
@@ -584,6 +602,15 @@ function isPrimaryBoardPointerEvent(event) {
 function handleBoardPointerRelease(board, event) {
   if (!board.pointerSession) return;
   if (
+    event.target.closest?.(
+      ".whiteboard-object-content[contenteditable='true']",
+    ) ||
+    event.target.closest?.(".whiteboard-table-cell[contenteditable='true']")
+  ) {
+    board.pointerSession = null;
+    return;
+  }
+  if (
     board.pointerSession.pointerId !== undefined &&
     event.pointerId !== board.pointerSession.pointerId
   )
@@ -592,13 +619,30 @@ function handleBoardPointerRelease(board, event) {
   const session = board.pointerSession;
   board.pointerSession = null;
 
+  if (session.moved || !session.objectId || session.openedEditor) return;
+
+  const targetObject = board.objects.find(
+    (item) => item.id === session.objectId,
+  );
+  if (!targetObject) return;
+
+  setBoardSelection(board, session.objectId);
+  activeCanvasBoardId = board.id;
+
   if (
     session.pointerType !== "touch" &&
     session.pointerType !== "pen" &&
     session.pointerType !== ""
-  )
+  ) {
+    openBoardObjectEditor(
+      board,
+      session.objectId,
+      canObjectEditInline(targetObject)
+        ? { type: "point", x: event.clientX, y: event.clientY }
+        : "end",
+    );
     return;
-  if (session.moved || !session.objectId || session.openedEditor) return;
+  }
 
   const now = Date.now();
   const lastTap = board.tapState;
@@ -613,6 +657,13 @@ function handleBoardPointerRelease(board, event) {
     return;
   }
 
+  openBoardObjectEditor(
+    board,
+    session.objectId,
+    canObjectEditInline(targetObject)
+      ? { type: "point", x: event.clientX, y: event.clientY }
+      : "end",
+  );
   board.tapState = {
     objectId: session.objectId,
     time: now,
@@ -1193,15 +1244,58 @@ function setObjectEditing(board, objectId, editing, selectionMode = "end") {
       `.whiteboard-object[data-object-id="${objectId}"] .whiteboard-object-content`,
     );
     if (!editable) return;
-    editable.focus();
+    focusBoardEditable(editable, selectionMode);
+  });
+}
+
+function focusBoardEditable(editable, selectionMode = "end") {
+  if (!editable) return;
+
+  editable.setAttribute("tabindex", "0");
+  editable.focus({ preventScroll: true });
+  editable.focus();
+
+  requestAnimationFrame(() => {
     const selection = window.getSelection();
     const range = document.createRange();
-    range.selectNodeContents(editable);
     selection.removeAllRanges();
+
     if (selectionMode === "all") {
+      range.selectNodeContents(editable);
       selection.addRange(range);
+      requestAnimationFrame(() => {
+        const nextSelection = window.getSelection();
+        const nextRange = document.createRange();
+        nextRange.selectNodeContents(editable);
+        nextSelection.removeAllRanges();
+        nextSelection.addRange(nextRange);
+      });
       return;
     }
+
+    if (selectionMode?.type === "point") {
+      const caretPosition = document.caretPositionFromPoint?.(
+        selectionMode.x,
+        selectionMode.y,
+      );
+      if (caretPosition?.offsetNode) {
+        range.setStart(caretPosition.offsetNode, caretPosition.offset);
+        range.collapse(true);
+        selection.addRange(range);
+        return;
+      }
+
+      const caretRange = document.caretRangeFromPoint?.(
+        selectionMode.x,
+        selectionMode.y,
+      );
+      if (caretRange) {
+        selection.addRange(caretRange);
+        return;
+      }
+    }
+
+    range.selectNodeContents(editable);
     range.collapse(false);
     selection.addRange(range);
   });
@@ -1363,6 +1457,17 @@ function updateBoardInteraction(board, event) {
   if (!target) return;
 
   const pointer = getBoardPointer(board, event);
+
+  if (board.interaction.type === "move-ready") {
+    const deltaX = pointer.x - board.interaction.startPointer.x;
+    const deltaY = pointer.y - board.interaction.startPointer.y;
+    if (Math.hypot(deltaX, deltaY) < 4) {
+      return;
+    }
+
+    saveCanvasBoardState(board.id);
+    board.interaction.type = "move";
+  }
 
   if (board.interaction.type === "move") {
     target.x = clampCanvasValue(
@@ -1861,6 +1966,8 @@ function renderTextObject(node, board, object, style) {
   const content = document.createElement("div");
   content.className = "whiteboard-object-content";
   content.contentEditable = String(Boolean(object.editing));
+  content.tabIndex = 0;
+  content.spellcheck = false;
   content.dataset.objectId = object.id;
   content.textContent =
     object.text ||

@@ -9,14 +9,16 @@
   border: 1px solid #d4deea;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.96);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .whiteboard-toolbar-inner {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
+  min-width: max-content;
   padding: 10px 12px;
 }
 
@@ -24,7 +26,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .whiteboard-toolbar-group .btn {
@@ -158,6 +160,12 @@
   white-space: pre-wrap;
   word-break: break-word;
   touch-action: manipulation;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.whiteboard-object-content[contenteditable="true"] {
+  cursor: text;
 }
 
 .whiteboard-shape-content {
@@ -463,50 +471,11 @@
     padding: 8px 10px;
   }
 
-  .whiteboard-toolbar-group {
-    width: 100%;
-  }
-
-  .whiteboard-toolbar-group .btn {
-    flex: 1 1 120px;
-  }
-
-  .whiteboard-toolbar-control {
-    display: grid;
-    grid-template-columns: 52px minmax(0, 1fr);
-    align-items: center;
-    width: calc(50% - 4px);
-  }
-
-  .whiteboard-toolbar-control label {
-    margin: 0;
-  }
-
   .whiteboard-toolbar-group-end {
-    margin-left: 0;
-  }
-
-  .whiteboard-toolbar-status {
-    width: 100%;
-    min-width: 0;
+    margin-left: auto;
   }
 
   .whiteboard-wrapper {
     min-height: 300px;
-  }
-}
-
-@media (max-width: 560px) {
-  .whiteboard-toolbar-inner {
-    gap: 6px;
-  }
-
-  .whiteboard-toolbar-control {
-    width: 100%;
-    grid-template-columns: 58px minmax(0, 1fr);
-  }
-
-  .whiteboard-toolbar-group .btn {
-    flex-basis: calc(50% - 6px);
   }
 }

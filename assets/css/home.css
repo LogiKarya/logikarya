@@ -16,7 +16,11 @@
   border: 1px solid rgba(196, 210, 229, 0.7);
   border-radius: 28px;
   background:
-    radial-gradient(circle at top right, rgba(56, 189, 248, 0.2), transparent 28%),
+    radial-gradient(
+      circle at top right,
+      rgba(56, 189, 248, 0.2),
+      transparent 28%
+    ),
     linear-gradient(135deg, #0f3c78 0%, #2563eb 50%, #38bdf8 100%);
   color: #fff;
   box-shadow: 0 24px 54px rgba(37, 99, 235, 0.18);
@@ -159,7 +163,11 @@
 
 .dark-mode .home-hero {
   background:
-    radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 28%),
+    radial-gradient(
+      circle at top right,
+      rgba(56, 189, 248, 0.16),
+      transparent 28%
+    ),
     linear-gradient(135deg, #102340 0%, #1d4ed8 48%, #0ea5e9 100%);
 }
 
