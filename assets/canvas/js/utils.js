@@ -1,6 +1,5 @@
 // ===============================
 // UTILS: CANVAS HELPERS
-// ===============================
 
 // Resize canvas agar tetap tajam (HD / Retina)
 function resizeCanvas(canvas, ctx) {
@@ -28,7 +27,6 @@ function downloadCanvas(canvas, filename = "whiteboard.png") {
 
 // ===============================
 // UTILS: LOCAL STORAGE
-// ===============================
 
 // Simpan data ke localStorage
 function saveToLocal(key, data) {
@@ -48,7 +46,6 @@ function clearLocal(key) {
 
 // ===============================
 // UTILS: DOM HELPERS
-// ===============================
 
 // Ambil elemen
 function $(selector) {
@@ -62,21 +59,19 @@ function $all(selector) {
 
 // ===============================
 // UTILS: EVENT HELPERS
-// ===============================
 function on(el, event, handler) {
   if (el) el.addEventListener(event, handler);
 }
 
 // ===============================
 // UTILS: RANDOM / ID
-// ===============================
+
 function generateId(prefix = "id") {
   return prefix + "_" + Math.random().toString(36).substr(2, 9);
 }
 
 // ===============================
 // UTILS: DEBOUNCE (PERFORMANCE)
-// ===============================
 function debounce(func, delay = 300) {
   let timeout;
   return function (...args) {
@@ -87,7 +82,6 @@ function debounce(func, delay = 300) {
 
 // ===============================
 // UTILS: SIMPLE LOGGER
-// ===============================
 function log(...args) {
   console.log("[LogiKarya]:", ...args);
 }
